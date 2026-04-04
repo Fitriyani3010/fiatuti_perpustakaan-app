@@ -5,14 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Buku;
 use App\Models\Kategori;
 use App\Models\Peminjaman;
-use App\Models\User; 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class UserDashboardController extends Controller
 {
+    // ===============================
     // DASHBOARD USER
+    // ===============================
     public function home(Request $request)
     {
         /** @var User $user */
@@ -29,17 +32,17 @@ class UserDashboardController extends Controller
             ->sum('denda');
 
         $kategoris = Kategori::all();
-        $search = $request->get('search');
+        $search = $request->search;
 
         $bukuPopuler = Buku::with('kategori')
-            ->when($search, function ($query) use ($search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('judul', 'like', "%$search%")
-                      ->orWhere('penulis', 'like', "%$search%");
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($qq) use ($search) {
+                    $qq->where('judul', 'like', "%$search%")
+                        ->orWhere('penulis', 'like', "%$search%");
                 });
             })
-            ->when($request->kategori, function ($query) use ($request) {
-                $query->where('kategori_id', $request->kategori);
+            ->when($request->kategori, function ($q) use ($request) {
+                $q->where('kategori_id', $request->kategori);
             })
             ->latest()
             ->take(8)
@@ -55,14 +58,18 @@ class UserDashboardController extends Controller
         ));
     }
 
-    // HALAMAN KATEGORI
+    // ===============================
+    // KATEGORI
+    // ===============================
     public function kategori()
     {
         $kategoris = Kategori::withCount('bukus')->get();
         return view('user.kategori', compact('kategoris'));
     }
 
-    // HALAMAN LIBRARY
+    // ===============================
+    // LIBRARY
+    // ===============================
     public function library(Request $request)
     {
         $query = Buku::query();
@@ -70,39 +77,129 @@ class UserDashboardController extends Controller
         if ($request->search) {
             $query->where(function ($q) use ($request) {
                 $q->where('judul', 'like', '%' . $request->search . '%')
-                  ->orWhere('penulis', 'like', '%' . $request->search . '%');
+                    ->orWhere('penulis', 'like', '%' . $request->search . '%');
             });
         }
 
         $books = $query->paginate(6);
         return view('user.library', compact('books'));
     }
+
+    // ===============================
+    // DETAIL BUKU
+    // ===============================
     public function detailBuku($id)
-{
-    $buku = Buku::with('kategori')->findOrFail($id);
+    {
+        $buku = Buku::with('kategori')->findOrFail($id);
 
-    $rekomendasi = Buku::where('id', '!=', $id)
-        ->take(4)
-        ->get();
+        $rekomendasi = Buku::where('id', '!=', $id)
+            ->take(4)
+            ->get();
 
-    return view('user.detail_buku', compact('buku', 'rekomendasi'));
-}
+        return view('user.detail_buku', compact('buku', 'rekomendasi'));
+    }
 
-    // RIWAYAT PEMINJAMAN
-    public function riwayat()
+    // ===============================
+    // PINJAM BUKU
+    // ===============================
+    public function pinjam($id)
     {
         /** @var User $user */
         $user = Auth::user();
 
-        $riwayats = Peminjaman::with('buku')
-            ->where('user_id', $user->id)
-            ->latest()
-            ->get();
+        $buku = Buku::findOrFail($id);
+
+        // ❌ stok habis
+        if ($buku->stok <= 0) {
+            return back()->with('error', 'Stok buku habis');
+        }
+
+        // ❌ sudah pinjam buku ini
+        $cek = Peminjaman::where('user_id', $user->id)
+            ->where('buku_id', $id)
+            ->whereIn('status', ['menunggu', 'dipinjam'])
+            ->exists();
+
+        if ($cek) {
+            return back()->with('error', 'Kamu sudah meminjam buku ini');
+        }
+
+        // ✅ simpan
+        Peminjaman::create([
+            'user_id' => $user->id,
+            'buku_id' => $id,
+            'tanggal_pinjam' => now(),
+            'status' => 'menunggu',
+            'denda' => 0
+        ]);
+
+        return back()->with('success', 'Menunggu persetujuan petugas');
+    }
+
+    // ===============================
+    // RETURN BUKU
+    // ===============================
+    public function returnBuku($id)
+    {
+        $peminjaman = Peminjaman::with('buku')->findOrFail($id);
+
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if ($peminjaman->user_id != $user->id) {
+            return back()->with('error', 'Akses ditolak');
+        }
+
+        if ($peminjaman->status != 'dipinjam') {
+            return back()->with('error', 'Buku tidak bisa dikembalikan');
+        }
+
+        $hari = Carbon::parse($peminjaman->tanggal_pinjam)->diffInDays(now());
+
+        $denda = 0;
+
+        if ($hari > 7) {
+            $denda = 20000 + (($hari - 7) * 5000);
+        }
+
+        // update
+        $peminjaman->update([
+            'tanggal_kembali' => now(),
+            'status' => 'dikembalikan',
+            'denda' => $denda
+        ]);
+
+        // tambah stok
+        $peminjaman->buku->increment('stok');
+
+        return back()->with('success', 'Buku berhasil dikembalikan');
+    }
+
+    // ===============================
+    // RIWAYAT
+    // ===============================
+    public function riwayat(Request $request)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $query = Peminjaman::with('buku')
+            ->where('user_id', $user->id);
+
+        if ($request->search) {
+            $query->whereHas('buku', function ($q) use ($request) {
+                $q->where('judul', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        $riwayats = $query->latest()->get();
 
         return view('user.riwayat', compact('riwayats'));
     }
 
-    // HALAMAN DENDA
+    // ===============================
+    // DENDA
+    // ===============================
     public function denda()
     {
         /** @var User $user */
@@ -119,7 +216,9 @@ class UserDashboardController extends Controller
         return view('user.denda', compact('denda', 'totalDenda'));
     }
 
-    // HALAMAN PROFILE
+    // ===============================
+    // PROFILE
+    // ===============================
     public function profile()
     {
         /** @var User $user */
@@ -128,13 +227,14 @@ class UserDashboardController extends Controller
         return view('user.profile', compact('user'));
     }
 
-    // UPDATE PROFILE + FOTO
+    // ===============================
+    // UPDATE PROFILE
+    // ===============================
     public function updateProfile(Request $request)
     {
         /** @var User $user */
         $user = Auth::user();
 
-        // VALIDASI
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
@@ -143,28 +243,22 @@ class UserDashboardController extends Controller
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
-        // UPLOAD FOTO
         if ($request->hasFile('foto')) {
 
-            // hapus foto lama
             if ($user->foto && Storage::exists('public/foto/' . $user->foto)) {
                 Storage::delete('public/foto/' . $user->foto);
             }
 
-            // simpan foto baru
             $path = $request->file('foto')->store('public/foto');
-
             $user->foto = basename($path);
         }
 
-        // UPDATE DATA
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->no_telepon = $request->no_telepon;
-        $user->alamat = $request->alamat;
-
-        // SIMPAN
-        $user->save();
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'no_telepon' => $request->no_telepon,
+            'alamat' => $request->alamat
+        ]);
 
         return back()->with('success', 'Profile berhasil diperbarui!');
     }

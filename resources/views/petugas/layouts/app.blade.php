@@ -340,6 +340,12 @@ table tbody tr:hover {
             <li class="{{ request()->routeIs('petugas.buku') ? 'active' : '' }}">
                 <a href="{{ route('petugas.buku') }}">Kelola buku</a>
             </li>
+             <li class="{{ request()->routeIs('petugas.peminjaman') ? 'active' : '' }}">
+                <a href="{{ route('petugas.peminjaman') }}">Kelola Peminjaman</a>
+            </li>
+             <li class="{{ request()->routeIs('petugas.denda') ? 'active' : '' }}">
+                <a href="{{ route('petugas.denda') }}">Kelola denda</a>
+            </li>
         </ul>
 
         <div class="sb-bottom">

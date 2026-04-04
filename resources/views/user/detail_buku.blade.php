@@ -29,10 +29,6 @@
     flex: 1;
 }
 
-.detail-info h2 {
-    margin-bottom: 10px;
-}
-
 .label {
     color: #6b7280;
     font-size: 14px;
@@ -48,32 +44,43 @@
     margin: 10px 0;
 }
 
-.btn-pinjam {
-    background: #2563eb;
-    color: white;
+.badge.red {
+    background: #ef4444;
+}
+
+.btn {
     border: none;
     padding: 10px 18px;
     border-radius: 8px;
     cursor: pointer;
-    margin: 10px 0;
+    margin: 10px 5px 10px 0;
+}
+
+.btn-pinjam {
+    background: #2563eb;
+    color: white;
+}
+
+.btn-return {
+    background: #f59e0b;
+    color: white;
 }
 
 .btn-pinjam:hover {
     background: #1d4ed8;
 }
 
-.rekomendasi {
-    margin-top: 20px;
+.btn-return:hover {
+    background: #d97706;
 }
 
-.rekomendasi h4 {
-    margin-bottom: 15px;
+.rekomendasi {
+    margin-top: 20px;
 }
 
 .rekomendasi-list {
     display: flex;
     gap: 15px;
-    text-decoration: none;
 }
 
 .rekomendasi-item {
@@ -109,16 +116,43 @@
         <p class="label">Tahun: {{ $buku->tahun_terbit ?? '-' }}</p>
         <p class="label">Kategori: {{ $buku->kategori->nama ?? '-' }}</p>
 
-        <div class="badge">
+        {{-- STATUS --}}
+        <div class="badge {{ $buku->stok <= 0 ? 'red' : '' }}">
             {{ $buku->stok > 0 ? 'Tersedia' : 'Tidak Tersedia' }}
         </div>
 
         <br>
 
-        <button class="btn-pinjam">
-            Pinjam Buku
-        </button>
+        {{-- 🔥 CEK STATUS PEMINJAMAN USER --}}
+        @php
+            $pinjaman = \App\Models\Peminjaman::where('user_id', auth()->id())
+                        ->where('buku_id', $buku->id)
+                        ->whereIn('status', ['menunggu','dipinjam'])
+                        ->first();
+        @endphp
 
+        {{-- 🔥 BUTTON PINJAM --}}
+        @if(!$pinjaman && $buku->stok > 0)
+            <form action="{{ route('user.pinjam', $buku->id) }}" method="POST">
+                @csrf
+                <button class="btn btn-pinjam">Pinjam Buku</button>
+            </form>
+        @endif
+
+        {{-- 🔥 STATUS MENUNGGU --}}
+        @if($pinjaman && $pinjaman->status == 'menunggu')
+            <span class="badge">Menunggu Persetujuan</span>
+        @endif
+
+        {{-- 🔥 BUTTON RETURN --}}
+        @if($pinjaman && $pinjaman->status == 'dipinjam')
+            <form action="{{ route('user.return', $pinjaman->id) }}" method="POST">
+                @csrf
+                <button class="btn btn-return">Return Buku</button>
+            </form>
+        @endif
+
+        {{-- DESKRIPSI --}}
         <p style="margin-top:10px;">
             {{ $buku->deskripsi ?? 'Tidak ada deskripsi' }}
         </p>
@@ -139,5 +173,4 @@
         @endforeach
     </div>
 </div>
-
 @endsection

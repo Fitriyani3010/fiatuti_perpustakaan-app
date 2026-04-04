@@ -197,7 +197,7 @@
     <div class="sec-title">Buku Populer</div>
     <div class="buku-grid">
     @foreach($bukuPopuler as $buku)
-        <a href="#" class="buku-card">
+        <a href="{{ route('user.buku.detail', $buku->id) }}" class="buku-card">
             
             {{-- COVER --}}
             <div class="buku-cover">

@@ -9,6 +9,7 @@ use App\Models\Kategori;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class PetugasDashboardController extends Controller
 {
@@ -28,10 +29,8 @@ class PetugasDashboardController extends Controller
     {
         $anggotas = User::where('role', 'user')
             ->when($request->search, function ($q) use ($request) {
-                $q->where(function ($query) use ($request) {
-                    $query->where('name', 'like', "%{$request->search}%")
-                          ->orWhere('email', 'like', "%{$request->search}%");
-                });
+                $q->where('name', 'like', "%{$request->search}%")
+                  ->orWhere('email', 'like', "%{$request->search}%");
             })
             ->latest()
             ->get();
@@ -61,12 +60,9 @@ class PetugasDashboardController extends Controller
 
     public function update(Request $request, $id)
     {
-        User::findOrFail($id)->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'no_telepon' => $request->no_telepon,
-            'alamat' => $request->alamat,
-        ]);
+        User::findOrFail($id)->update($request->only([
+            'name','email','no_telepon','alamat'
+        ]));
 
         return back()->with('success', 'Anggota berhasil diupdate');
     }
@@ -78,7 +74,6 @@ class PetugasDashboardController extends Controller
     }
 
     // ================= BUKU =================
-
     public function buku(Request $request)
     {
         $bukus = Buku::with('kategori')
@@ -94,74 +89,43 @@ class PetugasDashboardController extends Controller
         return view('petugas.buku', compact('bukus', 'kategoris'));
     }
 
-    // ➕ TAMBAH BUKU
     public function storeBuku(Request $request)
     {
         $request->validate([
             'judul' => 'required',
             'penulis' => 'required',
             'stok' => 'required|integer',
-            'kategori_id' => 'required|exists:kategoris,id', // 🔥 FIX
-            'cover' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'kategori_id' => 'required|exists:kategoris,id',
+            'cover' => 'nullable|image|mimes:jpg,jpeg,png|max:20000',
         ]);
 
-        $coverPath = null;
+        $cover = $request->file('cover')?->store('buku', 'public');
 
-        if ($request->hasFile('cover')) {
-            $coverPath = $request->file('cover')->store('buku', 'public');
-        }
-
-        Buku::create([
-            'judul' => $request->judul,
-            'penulis' => $request->penulis,
-            'penerbit' => $request->penerbit,
-            'tahun_terbit' => $request->tahun_terbit,
-            'kategori_id' => $request->kategori_id,
-            'deskripsi' => $request->deskripsi,
-            'stok' => $request->stok,
-            'cover' => $coverPath,
-        ]);
+        Buku::create($request->only([
+            'judul','penulis','penerbit','tahun_terbit','kategori_id','deskripsi','stok'
+        ]) + ['cover' => $cover]);
 
         return back()->with('success', 'Buku berhasil ditambahkan');
     }
 
-    // ✏️ UPDATE BUKU
     public function updateBuku(Request $request, $id)
     {
         $buku = Buku::findOrFail($id);
 
-        $request->validate([
-            'judul' => 'required',
-            'penulis' => 'required',
-            'stok' => 'required|integer',
-            'kategori_id' => 'required|exists:kategoris,id', // 🔥 FIX
-            'cover' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
-
         if ($request->hasFile('cover')) {
-
             if ($buku->cover) {
                 Storage::disk('public')->delete($buku->cover);
             }
-
             $buku->cover = $request->file('cover')->store('buku', 'public');
         }
 
-        $buku->update([
-            'judul' => $request->judul,
-            'penulis' => $request->penulis,
-            'penerbit' => $request->penerbit,
-            'tahun_terbit' => $request->tahun_terbit,
-            'kategori_id' => $request->kategori_id,
-            'deskripsi' => $request->deskripsi,
-            'stok' => $request->stok,
-            'cover' => $buku->cover,
-        ]);
+        $buku->update($request->only([
+            'judul','penulis','penerbit','tahun_terbit','kategori_id','deskripsi','stok'
+        ]));
 
         return back()->with('success', 'Buku berhasil diupdate');
     }
 
-    // ❌ DELETE
     public function deleteBuku($id)
     {
         $buku = Buku::findOrFail($id);
@@ -173,5 +137,96 @@ class PetugasDashboardController extends Controller
         $buku->delete();
 
         return back()->with('success', 'Buku berhasil dihapus');
+    }
+
+    // ================= PEMINJAMAN =================
+    public function peminjaman()
+    {
+        $data = Peminjaman::with(['user','buku'])->latest()->get();
+        return view('petugas.peminjaman', compact('data'));
+    }
+
+    // ✅ APPROVE
+    public function approve($id)
+    {
+        $p = Peminjaman::findOrFail($id);
+
+        if ($p->status != 'menunggu') {
+            return back()->with('error', 'Sudah diproses');
+        }
+
+        if ($p->buku->stok <= 0) {
+            return back()->with('error', 'Stok habis');
+        }
+
+        $p->update([
+            'status' => 'dipinjam',
+            'tanggal_pinjam' => now(),
+            'tanggal_kembali' => now()->addDays(1)
+        ]);
+
+        $p->buku->decrement('stok');
+
+        return back()->with('success', 'Disetujui');
+    }
+
+    // 🔵 RETURN
+    public function returnBuku($id)
+    {
+        $p = Peminjaman::findOrFail($id);
+
+        if ($p->status != 'dipinjam' && $p->status != 'terlambat') {
+            return back()->with('error', 'Tidak valid');
+        }
+
+        $today = now();
+        $batas = Carbon::parse($p->tanggal_kembali);
+
+        $denda = 0;
+
+        if ($today->gt($batas)) {
+            $telat = $today->diffInDays($batas);
+            $denda = 20000 + ($telat * 5000);
+        }
+
+        $p->update([
+            'status' => 'dikembalikan',
+            'tanggal_dikembalikan' => $today,
+            'denda' => $denda
+        ]);
+
+        $p->buku->increment('stok');
+
+        return back()->with('success', 'Buku dikembalikan');
+    }
+
+    // ================= DENDA =================
+    public function denda()
+    {
+        $data = Peminjaman::with(['user','buku'])->get();
+        $totalDenda = 0;
+
+        foreach ($data as $item) {
+
+            $terlambat = 0;
+            $denda = $item->denda;
+
+            if ($item->status == 'dipinjam' || $item->status == 'terlambat') {
+
+                $batas = Carbon::parse($item->tanggal_kembali);
+
+                if (now()->gt($batas)) {
+                    $terlambat = now()->diffInDays($batas);
+                    $denda = 20000 + ($terlambat * 5000);
+                }
+            }
+
+            $item->terlambat = $terlambat;
+            $item->total_denda = $denda;
+
+            $totalDenda += $denda;
+        }
+
+        return view('petugas.denda', compact('data','totalDenda'));
     }
 }
