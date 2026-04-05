@@ -43,7 +43,7 @@ class LoginController extends Controller
         $user = Auth::user();
 
         return match($user->role) {
-            'kepala_perpustakaan' => redirect()->route('kepala.dashboard'),
+            'kepala_perpustakaan' => redirect()->route('kepala.home'),
             'petugas'             => redirect()->route('petugas.home'),
             default               => redirect()->route('user.home'),
         };

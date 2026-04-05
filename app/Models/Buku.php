@@ -10,9 +10,7 @@ use App\Models\Peminjaman;
 class Buku extends Model
 {
     use HasFactory;
-
-    protected $table = 'bukus'; // opsional, tapi aman kalau nama tabel custom
-
+    protected $table = 'bukus';
     protected $fillable = [
         'judul',
         'penulis',
@@ -23,12 +21,10 @@ class Buku extends Model
         'stok',
         'cover'
     ];
-
     protected $casts = [
         'tahun_terbit' => 'integer',
         'stok' => 'integer',
     ];
-
     /**
      * Relasi ke kategori
      */
@@ -36,7 +32,6 @@ class Buku extends Model
     {
         return $this->belongsTo(Kategori::class);
     }
-
     /**
      * Relasi ke peminjaman
      */

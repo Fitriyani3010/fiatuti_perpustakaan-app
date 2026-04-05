@@ -37,13 +37,11 @@ class UserSeeder extends Seeder
             ],
         ];
 
-        foreach ($users as $user) {
-            User::updateOrCreate(
-                ['email' => $user['email']],
-                array_merge($user, [
-                    'password' => Hash::make('password123'),
-                ])
-            );
-        }
+       foreach ($users as $user) {
+    User::updateOrCreate(
+        ['email' => $user['email']],
+        $user 
+    );
+}
     }
 }

@@ -20,20 +20,15 @@ class UserDashboardController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-
         $bukuDipinjam = Peminjaman::where('user_id', $user->id)
             ->where('status', 'dipinjam')
             ->count();
-
         $totalPeminjaman = Peminjaman::where('user_id', $user->id)->count();
-
         $dendaAktif = Peminjaman::where('user_id', $user->id)
             ->where('denda', '>', 0)
             ->sum('denda');
-
         $kategoris = Kategori::all();
         $search = $request->search;
-
         $bukuPopuler = Buku::with('kategori')
             ->when($search, function ($q) use ($search) {
                 $q->where(function ($qq) use ($search) {
@@ -47,7 +42,6 @@ class UserDashboardController extends Controller
             ->latest()
             ->take(8)
             ->get();
-
         return view('user.home', compact(
             'bukuDipinjam',
             'totalPeminjaman',
@@ -57,7 +51,6 @@ class UserDashboardController extends Controller
             'search'
         ));
     }
-
     // ===============================
     // KATEGORI
     // ===============================
@@ -66,36 +59,30 @@ class UserDashboardController extends Controller
         $kategoris = Kategori::withCount('bukus')->get();
         return view('user.kategori', compact('kategoris'));
     }
-
     // ===============================
     // LIBRARY
     // ===============================
     public function library(Request $request)
     {
         $query = Buku::query();
-
         if ($request->search) {
             $query->where(function ($q) use ($request) {
                 $q->where('judul', 'like', '%' . $request->search . '%')
                     ->orWhere('penulis', 'like', '%' . $request->search . '%');
             });
         }
-
         $books = $query->paginate(6);
         return view('user.library', compact('books'));
     }
-
     // ===============================
     // DETAIL BUKU
     // ===============================
     public function detailBuku($id)
     {
         $buku = Buku::with('kategori')->findOrFail($id);
-
         $rekomendasi = Buku::where('id', '!=', $id)
             ->take(4)
             ->get();
-
         return view('user.detail_buku', compact('buku', 'rekomendasi'));
     }
 
@@ -106,25 +93,17 @@ class UserDashboardController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-
         $buku = Buku::findOrFail($id);
-
-        // ❌ stok habis
         if ($buku->stok <= 0) {
             return back()->with('error', 'Stok buku habis');
         }
-
-        // ❌ sudah pinjam buku ini
         $cek = Peminjaman::where('user_id', $user->id)
             ->where('buku_id', $id)
             ->whereIn('status', ['menunggu', 'dipinjam'])
             ->exists();
-
         if ($cek) {
             return back()->with('error', 'Kamu sudah meminjam buku ini');
         }
-
-        // ✅ simpan
         Peminjaman::create([
             'user_id' => $user->id,
             'buku_id' => $id,
@@ -145,33 +124,23 @@ class UserDashboardController extends Controller
 
         /** @var \App\Models\User $user */
         $user = Auth::user();
-
         if ($peminjaman->user_id != $user->id) {
             return back()->with('error', 'Akses ditolak');
         }
-
         if ($peminjaman->status != 'dipinjam') {
             return back()->with('error', 'Buku tidak bisa dikembalikan');
         }
-
         $hari = Carbon::parse($peminjaman->tanggal_pinjam)->diffInDays(now());
-
         $denda = 0;
-
-        if ($hari > 7) {
-            $denda = 20000 + (($hari - 7) * 5000);
+        if ($hari > 1) {
+            $denda = 20000 + (($hari - 1) * 5000);
         }
-
-        // update
         $peminjaman->update([
             'tanggal_kembali' => now(),
             'status' => 'dikembalikan',
             'denda' => $denda
         ]);
-
-        // tambah stok
         $peminjaman->buku->increment('stok');
-
         return back()->with('success', 'Buku berhasil dikembalikan');
     }
 
