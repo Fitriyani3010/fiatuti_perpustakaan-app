@@ -74,7 +74,6 @@
             background: #ef4444;
         }
     </style>
-    <h2 class="page-title">Executive Dashboard</h2>
     {{-- ================= CARDS ================= --}}
     <div class="cards">
         <div class="card">

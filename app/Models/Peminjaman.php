@@ -10,6 +10,7 @@ class Peminjaman extends Model
     protected $fillable = [
         'user_id',
         'buku_id',
+        'jumlah',
         'tanggal_pinjam',
         'tanggal_kembali',
         'tanggal_dikembalikan',
@@ -20,7 +21,7 @@ class Peminjaman extends Model
         'tanggal_pinjam'       => 'date',
         'tanggal_kembali'      => 'date',
         'tanggal_dikembalikan' => 'date',
-    ];
+    ];           
     public function user()
     {
         return $this->belongsTo(User::class);

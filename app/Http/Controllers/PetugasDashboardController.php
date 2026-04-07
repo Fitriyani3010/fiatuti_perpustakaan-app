@@ -215,28 +215,28 @@ class PetugasDashboardController extends Controller
 
     // ================= APPROVE =================
     public function approve($id)
-    {
-        $p = Peminjaman::with('buku')->findOrFail($id);
+{
+    $p = Peminjaman::with('buku')->findOrFail($id);
 
-        if ($p->status != 'menunggu') {
-            return back()->with('error', 'Sudah diproses');
-        }
-
-        if ($p->buku->stok <= 0) {
-            return back()->with('error', 'Stok habis');
-        }
-
-        $p->update([
-            'status' => 'dipinjam',
-            'tanggal_pinjam' => now(),
-            'tanggal_kembali' => now()->addDays(1),
-        ]);
-
-        $p->buku->decrement('stok');
-
-        return back()->with('success', 'Disetujui');
+    if ($p->status != 'menunggu') {
+        return back()->with('error', 'Sudah diproses');
     }
 
+    if ($p->jumlah > $p->buku->stok) {
+        return back()->with('error', 'Stok tidak cukup');
+    }
+
+    $p->update([
+        'status' => 'dipinjam',
+        'tanggal_pinjam' => now(),
+        'tanggal_kembali' => now()->addDays(1),
+    ]);
+
+    // 🔥 FIX DI SINI
+    $p->buku->decrement('stok', $p->jumlah);
+
+    return back()->with('success', 'Disetujui');
+}
     // ================= RETURN =================
     public function returnBuku($id)
     {
@@ -262,7 +262,7 @@ class PetugasDashboardController extends Controller
             'denda' => $denda,
         ]);
 
-        $p->buku->increment('stok');
+       $p->buku->increment('stok', $p->jumlah);
 
         return back()->with('success', 'Buku dikembalikan');
     }
