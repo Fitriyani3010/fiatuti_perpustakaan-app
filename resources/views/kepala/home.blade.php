@@ -74,7 +74,7 @@
             background: #ef4444;
         }
     </style>
-    {{-- ================= CARDS ================= --}}
+    {{-- cards --}}
     <div class="cards">
         <div class="card">
             <p>Total Buku</p>
@@ -93,7 +93,7 @@
             <h2>Rp {{ number_format($totalDenda, 0, ',', '.') }}</h2>
         </div>
     </div>
-    {{-- ================= PETUGAS ================= --}}
+    {{-- petugas --}}
     <div class="table-box">
         <h4 style="margin-bottom:10px;">Data Petugas</h4>
         <table>
@@ -119,7 +119,7 @@
             </tbody>
         </table>
     </div>
-    {{-- ================= BUKU ================= --}}
+    {{-- buku --}}
     <div class="table-box">
         <h4 style="margin-bottom:10px;">Buku Populer</h4>
         <table>

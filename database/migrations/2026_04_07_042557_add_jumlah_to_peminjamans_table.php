@@ -10,11 +10,11 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up()
-{
-    Schema::table('peminjamans', function (Blueprint $table) {
-        $table->integer('jumlah')->default(1);
-    });
-}
+    {
+        Schema::table('peminjamans', function (Blueprint $table) {
+            $table->integer('jumlah')->default(1);
+        });
+    }
 
     /**
      * Reverse the migrations.

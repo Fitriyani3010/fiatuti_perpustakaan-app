@@ -24,15 +24,12 @@ class LoginController extends Controller
             'password.required' => 'Password wajib diisi.',
             'password.min'      => 'Password minimal 6 karakter.',
         ]);
-
         $credentials = $request->only('email', 'password');
         $remember    = $request->has('remember');
-
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
             return $this->redirectBasedOnRole();
         }
-
         return back()
             ->withInput($request->only('email'))
             ->withErrors(['email' => 'Email atau password salah.']);
@@ -41,8 +38,7 @@ class LoginController extends Controller
     protected function redirectBasedOnRole()
     {
         $user = Auth::user();
-
-        return match($user->role) {
+        return match ($user->role) {
             'kepala_perpustakaan' => redirect()->route('kepala.home'),
             'petugas'             => redirect()->route('petugas.home'),
             default               => redirect()->route('user.home'),

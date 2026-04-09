@@ -10,17 +10,17 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up()
-{
-    Schema::table('peminjamans', function (Blueprint $table) {
-        $table->string('bukti_pembayaran')->nullable();
-        $table->enum('status_pembayaran', ['belum','menunggu','lunas'])->default('belum');
-    });
-}
+    {
+        Schema::table('peminjamans', function (Blueprint $table) {
+            $table->string('bukti_pembayaran')->nullable();
+            $table->enum('status_pembayaran', ['belum', 'menunggu', 'lunas'])->default('belum');
+        });
+    }
 
-public function down()
-{
-    Schema::table('peminjamans', function (Blueprint $table) {
-        $table->dropColumn(['bukti_pembayaran', 'status_pembayaran']);
-    });
-}
+    public function down()
+    {
+        Schema::table('peminjamans', function (Blueprint $table) {
+            $table->dropColumn(['bukti_pembayaran', 'status_pembayaran']);
+        });
+    }
 };

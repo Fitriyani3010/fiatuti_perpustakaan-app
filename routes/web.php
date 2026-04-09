@@ -7,41 +7,21 @@ use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\PetugasDashboardController;
 use App\Http\Controllers\KepalaDashboardController;
 
-/*
-|--------------------------------------------------------------------------
-| PUBLIC
-|--------------------------------------------------------------------------
-*/
-
 Route::get('/', function () {
     return view('welcome');
 });
-/*
-|--------------------------------------------------------------------------
-| AUTH (Guest Only)
-|--------------------------------------------------------------------------
-*/
+// auth
 Route::middleware('guest')->group(function () {
     Route::get('/login',    [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login',   [LoginController::class, 'login']);
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
     Route::post('/register', [RegisterController::class, 'register']);
 });
-
-/*
-|--------------------------------------------------------------------------
-| LOGOUT
-|--------------------------------------------------------------------------
-*/
+// logout
 Route::post('/logout', [LoginController::class, 'logout'])
     ->name('logout')
     ->middleware('auth');
-
-/*
-|--------------------------------------------------------------------------
-| USER
-|--------------------------------------------------------------------------
-*/
+// user/anggota
 Route::middleware(['auth', 'role:user'])
     ->prefix('dashboard/user')
     ->name('user.')
@@ -60,87 +40,54 @@ Route::middleware(['auth', 'role:user'])
             ->name('pinjam');
         Route::post('/return/{id}', [UserDashboardController::class, 'returnBuku'])
             ->name('return');
-             Route::post('/bayar/{id}', [UserDashboardController::class, 'bayar'])
+        Route::post('/bayar/{id}', [UserDashboardController::class, 'bayar'])
             ->name('bayar');
     });
-
-/*
-|--------------------------------------------------------------------------
-| PETUGAS
-|--------------------------------------------------------------------------
-*/
+// petugas
 Route::middleware(['auth', 'role:petugas'])
     ->prefix('dashboard/petugas')
     ->name('petugas.')
     ->group(function () {
-
         Route::get('/', [PetugasDashboardController::class, 'home'])->name('home');
-
-        // ANGGOTA
         Route::get('/anggota', [PetugasDashboardController::class, 'anggota'])->name('anggota');
         Route::post('/anggota/store', [PetugasDashboardController::class, 'store'])->name('anggota.store');
         Route::put('/anggota/update/{id}', [PetugasDashboardController::class, 'update'])->name('anggota.update');
         Route::delete('/anggota/delete/{id}', [PetugasDashboardController::class, 'destroy'])->name('anggota.delete');
-
-        // BUKU
         Route::get('/buku', [PetugasDashboardController::class, 'buku'])->name('buku');
         Route::post('/buku/store', [PetugasDashboardController::class, 'storeBuku'])->name('buku.store');
         Route::put('/buku/update/{id}', [PetugasDashboardController::class, 'updateBuku'])->name('buku.update');
         Route::delete('/buku/delete/{id}', [PetugasDashboardController::class, 'deleteBuku'])->name('buku.delete');
-
-        // KATEGORI
-        Route::get('/kategori', [PetugasDashboardController::class,'kategori'])->name('kategori');
-        Route::post('/kategori/store', [PetugasDashboardController::class,'storeKategori'])->name('kategori.store');
-        Route::delete('/kategori/delete/{id}', [PetugasDashboardController::class,'deleteKategori'])->name('kategori.delete');
-
-        // PEMINJAMAN
+        Route::get('/kategori', [PetugasDashboardController::class, 'kategori'])->name('kategori');
+        Route::post('/kategori/store', [PetugasDashboardController::class, 'storeKategori'])->name('kategori.store');
+        Route::delete('/kategori/delete/{id}', [PetugasDashboardController::class, 'deleteKategori'])->name('kategori.delete');
         Route::get('/peminjaman', [PetugasDashboardController::class, 'peminjaman'])->name('peminjaman');
         Route::post('/peminjaman/approve/{id}', [PetugasDashboardController::class, 'approve'])->name('peminjaman.approve');
         Route::post('/peminjaman/tolak/{id}', [PetugasDashboardController::class, 'tolakPeminjaman'])->name('peminjaman.tolak');
         Route::post('/peminjaman/return/{id}', [PetugasDashboardController::class, 'returnBuku'])->name('peminjaman.return');
-
-        // DENDA
         Route::get('/denda', [PetugasDashboardController::class, 'denda'])->name('denda');
-
-        // 🔥 PEMBAYARAN DENDA (INI YANG PENTING)
         Route::post('/denda/konfirmasi/{id}', [PetugasDashboardController::class, 'konfirmasi'])->name('konfirmasi');
         Route::post('/denda/tolak/{id}', [PetugasDashboardController::class, 'tolakPembayaran'])->name('tolak');
     });
-
-
-/*
-|--------------------------------------------------------------------------
-| KEPALA PERPUSTAKAAN
-|--------------------------------------------------------------------------
-*/
+// kepala perpustakaan
 Route::middleware(['auth', 'role:kepala_perpustakaan'])
     ->prefix('dashboard/kepala')
     ->name('kepala.')
     ->group(function () {
-
         Route::get('/', [KepalaDashboardController::class, 'home'])->name('home');
-
         Route::get('/petugas', [KepalaDashboardController::class, 'petugas'])
             ->name('petugas');
-
         Route::post('/petugas/store', [KepalaDashboardController::class, 'storePetugas'])
             ->name('petugas.store');
-
         Route::put('/petugas/update/{id}', [KepalaDashboardController::class, 'updatePetugas'])
             ->name('petugas.update');
-
         Route::delete('/petugas/delete/{id}', [KepalaDashboardController::class, 'deletePetugas'])
             ->name('petugas.delete');
-
-        // 🔥 LAPORAN (FIX)
         Route::get('/laporan/peminjaman', [KepalaDashboardController::class, 'laporanPeminjaman'])
             ->name('laporan.peminjaman');
-
         Route::get('/laporan/denda', [KepalaDashboardController::class, 'laporanDenda'])
             ->name('laporan.denda');
-
         Route::get('/laporan/anggota', [KepalaDashboardController::class, 'laporanAnggota'])
             ->name('laporan.anggota');
-Route::get('/laporan/peminjaman/cetak', [KepalaDashboardController::class, 'cetaklaporanPeminjaman'])
-    ->name('laporan.peminjaman.cetak');
+        Route::get('/laporan/peminjaman/cetak', [KepalaDashboardController::class, 'cetaklaporanPeminjaman'])
+            ->name('laporan.peminjaman.cetak');
     });

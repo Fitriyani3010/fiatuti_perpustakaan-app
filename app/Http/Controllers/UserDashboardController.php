@@ -12,9 +12,7 @@ use Illuminate\Support\Facades\Storage;
 
 class UserDashboardController extends Controller
 {
-    // ===============================
-    // DASHBOARD
-    // ===============================
+    //    dashboard
     public function home(Request $request)
     {
         $user = Auth::user();
@@ -24,8 +22,6 @@ class UserDashboardController extends Controller
             ->sum('jumlah');
 
         $totalPeminjaman = Peminjaman::where('user_id', $user->id)->count();
-
-        // 🔥 hanya hitung yang belum lunas
         $dendaAktif = Peminjaman::where('user_id', $user->id)
             ->where('status_pembayaran', '!=', 'lunas')
             ->sum('denda');
@@ -48,10 +44,7 @@ class UserDashboardController extends Controller
             'bukuPopuler'
         ));
     }
-
-    // ===============================
-    // DETAIL BUKU
-    // ===============================
+    // detail buku
     public function detailBuku($id)
     {
         $buku = Buku::with('kategori')->findOrFail($id);
@@ -72,10 +65,7 @@ class UserDashboardController extends Controller
             'pinjaman'
         ));
     }
-
-    // ===============================
-    // PINJAM
-    // ===============================
+    //pinjam buku
     public function pinjam(Request $request, $id)
     {
         $request->validate([
@@ -118,9 +108,7 @@ class UserDashboardController extends Controller
         return back()->with('success', 'Menunggu persetujuan petugas');
     }
 
-    // ===============================
-    // RETURN (🔥 FIX DENDA)
-    // ===============================
+    //return buku
     public function returnBuku($id)
     {
         $p = Peminjaman::with('buku')->findOrFail($id);
@@ -159,9 +147,7 @@ class UserDashboardController extends Controller
         return back()->with('success', 'Buku dikembalikan');
     }
 
-    // ===============================
-    // LIBRARY
-    // ===============================
+    // library
     public function library(Request $request)
     {
         $books = Buku::with('kategori')
@@ -182,9 +168,7 @@ class UserDashboardController extends Controller
         return view('user.library', compact('books', 'kategoris'));
     }
 
-    // ===============================
-    // RIWAYAT
-    // ===============================
+    //riwayat
     public function riwayat(Request $request)
     {
         $query = Peminjaman::with('buku')
@@ -203,9 +187,7 @@ class UserDashboardController extends Controller
         return view('user.riwayat', compact('riwayats'));
     }
 
-    // ===============================
-    // DENDA (🔥 FIX TOTAL)
-    // ===============================
+    //denda
     public function denda()
     {
         $denda = Peminjaman::with('buku')
@@ -226,12 +208,9 @@ class UserDashboardController extends Controller
                 $terlambat = $batas->diffInDays(now());
                 $dendaFix = $terlambat * 5000 * $item->jumlah;
             }
-
-            // 🔥 kalau lunas nol
             if ($item->status_pembayaran == 'lunas') {
                 $dendaFix = 0;
             }
-
             $item->terlambat = $terlambat;
             $item->total_denda = $dendaFix;
 
@@ -241,61 +220,51 @@ class UserDashboardController extends Controller
         return view('user.denda', compact('denda', 'totalDenda'));
     }
 
-    // ===============================
-    // BAYAR (🔥 UNTUK MODAL)
-    // ===============================
+    //bayar denda
     public function bayar(Request $request, $id)
-{
-    $p = Peminjaman::findOrFail($id);
+    {
+        $p = Peminjaman::findOrFail($id);
 
-    if ($p->user_id != Auth::id()) {
-        return back()->with('error', 'Akses ditolak');
-    }
+        if ($p->user_id != Auth::id()) {
+            return back()->with('error', 'Akses ditolak');
+        }
 
-    if ($p->status_pembayaran == 'lunas') {
-        return back()->with('error', 'Sudah dibayar');
-    }
-
-    $request->validate([
-        'metode' => 'required|in:offline,online'
-    ]);
-
-    // ===============================
-    // JIKA ONLINE → WAJIB BUKTI
-    // ===============================
-    if ($request->metode == 'online') {
+        if ($p->status_pembayaran == 'lunas') {
+            return back()->with('error', 'Sudah dibayar');
+        }
 
         $request->validate([
-            'bukti' => 'required|image|max:2048'
+            'metode' => 'required|in:offline,online'
         ]);
 
-        $file = $request->file('bukti')->store('bukti', 'public');
+        if ($request->metode == 'online') {
 
-        $p->update([
-            'bukti_pembayaran' => $file,
-            'status_pembayaran' => 'menunggu',
-            'metode_pembayaran' => 'online'
-        ]);
+            $request->validate([
+                'bukti' => 'required|image|max:2048'
+            ]);
 
-        return back()->with('success', 'Bukti dikirim, tunggu konfirmasi petugas');
+            $file = $request->file('bukti')->store('bukti', 'public');
+
+            $p->update([
+                'bukti_pembayaran' => $file,
+                'status_pembayaran' => 'menunggu',
+                'metode_pembayaran' => 'online'
+            ]);
+
+            return back()->with('success', 'Bukti dikirim, tunggu konfirmasi petugas');
+        }
+
+        if ($request->metode == 'offline') {
+
+            $p->update([
+                'status_pembayaran' => 'menunggu',
+                'metode_pembayaran' => 'offline'
+            ]);
+
+            return back()->with('success', 'Silakan bayar ke petugas, tunggu konfirmasi');
+        }
     }
-
-    // ===============================
-    // JIKA OFFLINE → TANPA BUKTI
-    // ===============================
-    if ($request->metode == 'offline') {
-
-        $p->update([
-            'status_pembayaran' => 'menunggu',
-            'metode_pembayaran' => 'offline'
-        ]);
-
-        return back()->with('success', 'Silakan bayar ke petugas, tunggu konfirmasi');
-    }
-}
-    // ===============================
-    // PROFILE
-    // ===============================
+    //profile
     public function profile()
     {
         return view('user.profile', [
@@ -312,32 +281,23 @@ class UserDashboardController extends Controller
             'email' => 'required|email|unique:users,email,' . $user->id,
             'no_telepon' => 'nullable|string|max:20',
             'alamat' => 'nullable|string|max:255',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:20000', 
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:20000',
         ]);
-
-        // Update semua field
         $user->name = $request->name;
         $user->email = $request->email;
         $user->no_telepon = $request->no_telepon;
         $user->alamat = $request->alamat;
-
-        // Jika user upload foto baru
         if ($request->hasFile('foto')) {
             // Hapus foto lama jika ada
             if ($user->foto && Storage::exists('public/foto/' . $user->foto)) {
                 Storage::delete('public/foto/' . $user->foto);
             }
-
-            // Simpan foto baru
             $fotoName = time() . '_' . $request->file('foto')->getClientOriginalName();
             $request->file('foto')->storeAs('public/foto', $fotoName);
             $user->foto = $fotoName;
         }
-        /** @var \App\Models\User $user */
         $user = Auth::user();
-        // Simpan ke database
         $user->save();
-
         return back()->with('success', 'Profile updated successfully!');
     }
 }

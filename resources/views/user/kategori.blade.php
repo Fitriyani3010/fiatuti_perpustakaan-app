@@ -74,6 +74,7 @@
         .btn:hover {
             background: #2779bd;
         }
+
         .empty {
             grid-column: 1 / -1;
             text-align: center;

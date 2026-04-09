@@ -10,17 +10,20 @@
             font-weight: 700;
             margin-bottom: 20px;
         }
+
         .header {
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
         }
+
         .search {
             padding: 10px 16px;
             border-radius: 999px;
             border: 1px solid #ddd;
             width: 250px;
         }
+
         .btn-add {
             background: #3b82f6;
             color: white;
@@ -46,28 +49,34 @@
             border: none;
             cursor: pointer;
         }
+
         .table-box {
             background: #fff;
             padding: 20px;
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
         }
+
         th {
             text-align: left;
             padding: 12px;
             color: #6B7280;
             border-bottom: 1px solid #eee;
         }
+
         td {
             padding: 12px;
         }
+
         tr:hover {
             background: #f9fafb;
         }
+
         .modal {
             display: none;
             position: fixed;
@@ -76,12 +85,14 @@
             justify-content: center;
             align-items: center;
         }
+
         .modal-content {
             background: white;
             padding: 25px;
             border-radius: 16px;
             width: 380px;
         }
+
         .modal input,
         .modal textarea {
             width: 100%;

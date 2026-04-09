@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>@yield('title', 'Dashboard Kepala')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -84,7 +85,7 @@
             padding: 6px 12px;
             border-radius: 8px;
             font-size: 14px;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
         }
 
         /* LOGOUT */
@@ -109,7 +110,7 @@
 
         .nav-item.logout:hover {
             background: #ef4444;
-            color: white; /* 🔥 FIX */
+            color: white;
         }
 
         /* RESPONSIVE */
@@ -123,116 +124,127 @@
                 padding: 20px;
             }
         }
-        /* ===== CARD ===== */
-.card {
-    background: white;
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    margin-bottom: 20px;
-}
 
-/* ===== TABLE ===== */
-.table-modern {
-    width: 100%;
-    border-collapse: collapse;
-}
+        /* card */
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
 
-.table-modern thead {
-    background: #f8fafc;
-    color: #64748b;
-    font-size: 13px;
-}
+        /*table */
+        .table-modern {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-.table-modern th, 
-.table-modern td {
-    padding: 14px;
-    text-align: left;
-}
+        .table-modern thead {
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 13px;
+        }
 
-.table-modern tbody tr {
-    border-top: 1px solid #e5e7eb;
-    transition: 0.2s;
-}
+        .table-modern th,
+        .table-modern td {
+            padding: 14px;
+            text-align: left;
+        }
 
-.table-modern tbody tr:hover {
-    background: #f1f5f9;
-}
+        .table-modern tbody tr {
+            border-top: 1px solid #e5e7eb;
+            transition: 0.2s;
+        }
 
-/* ===== BADGE ===== */
-.badge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    color: white;
-}
-.badge.green { background: #10b981; }
-.badge.red { background: #ef4444; }
-.badge.orange { background: #f59e0b; }
+        .table-modern tbody tr:hover {
+            background: #f1f5f9;
+        }
 
-/* ===== PAGINATION MODERN ===== */
-.pagination {
-    display: flex;
-    gap: 6px;
-    justify-content: center;
-    margin-top: 20px;
-    flex-wrap: wrap;
-}
+        /*badge */
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: white;
+        }
 
-.pagination li {
-    list-style: none;
-}
+        .badge.green {
+            background: #10b981;
+        }
 
-.pagination a,
-.pagination span {
-    padding: 8px 14px;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-    text-decoration: none;
-    color: #334155;
-    font-size: 13px;
-    transition: 0.2s;
-}
+        .badge.red {
+            background: #ef4444;
+        }
 
-.pagination a:hover {
-    background: #2563eb;
-    color: white;
-}
+        .badge.orange {
+            background: #f59e0b;
+        }
 
-.pagination .active span {
-    background: #2563eb;
-    color: white;
-    border-color: #2563eb;
-}
+        /* pagination */
+        .pagination {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
 
-.pagination .disabled span {
-    opacity: 0.5;
-}
+        .pagination li {
+            list-style: none;
+        }
+
+        .pagination a,
+        .pagination span {
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            text-decoration: none;
+            color: #334155;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+
+        .pagination a:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .pagination .active span {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .pagination .disabled span {
+            opacity: 0.5;
+        }
     </style>
 </head>
+
 <body>
     <div class="dashboard">
         <div class="sidebar">
             <h2>Kepala</h2>
             <ul>
-    <li class="{{ request()->routeIs('kepala.home') ? 'active' : '' }}">
-        <a href="{{ route('kepala.home') }}">Dashboard</a>
-    </li>
+                <li class="{{ request()->routeIs('kepala.home') ? 'active' : '' }}">
+                    <a href="{{ route('kepala.home') }}">Dashboard</a>
+                </li>
 
-    <li class="{{ request()->routeIs('kepala.petugas') ? 'active' : '' }}">
-        <a href="{{ route('kepala.petugas') }}">Kelola Petugas</a>
-    </li>
-  <li class="{{ request()->routeIs('kepala.laporan.anggota') ? 'active' : '' }}">
-        <a href="{{ route('kepala.laporan.anggota') }}"> Anggota</a>
-    </li>
-    <li class="{{ request()->routeIs('kepala.laporan.peminjaman') ? 'active' : '' }}">
-        <a href="{{ route('kepala.laporan.peminjaman') }}"> Laporan Peminjaman</a>
-    </li>
+                <li class="{{ request()->routeIs('kepala.petugas') ? 'active' : '' }}">
+                    <a href="{{ route('kepala.petugas') }}">Kelola Petugas</a>
+                </li>
+                <li class="{{ request()->routeIs('kepala.laporan.anggota') ? 'active' : '' }}">
+                    <a href="{{ route('kepala.laporan.anggota') }}"> Anggota</a>
+                </li>
+                <li class="{{ request()->routeIs('kepala.laporan.peminjaman') ? 'active' : '' }}">
+                    <a href="{{ route('kepala.laporan.peminjaman') }}"> Laporan Peminjaman</a>
+                </li>
 
-    <li class="{{ request()->routeIs('kepala.laporan.denda') ? 'active' : '' }}">
-        <a href="{{ route('kepala.laporan.denda') }}"> Laporan Denda</a>
-    </li>
-</ul>
+                <li class="{{ request()->routeIs('kepala.laporan.denda') ? 'active' : '' }}">
+                    <a href="{{ route('kepala.laporan.denda') }}"> Laporan Denda</a>
+                </li>
+            </ul>
             <div class="sb-bottom">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -254,4 +266,5 @@
     </div>
     @yield('script')
 </body>
+
 </html>

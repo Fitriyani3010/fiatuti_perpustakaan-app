@@ -25,16 +25,10 @@ class Buku extends Model
         'tahun_terbit' => 'integer',
         'stok' => 'integer',
     ];
-    /**
-     * Relasi ke kategori
-     */
     public function kategori()
     {
         return $this->belongsTo(Kategori::class);
     }
-    /**
-     * Relasi ke peminjaman
-     */
     public function peminjamans()
     {
         return $this->hasMany(Peminjaman::class);

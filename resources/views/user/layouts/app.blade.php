@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Perpustakaan Digital')</title>
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet">
@@ -96,31 +95,31 @@
         }
 
         .sb-bottom {
-        position: absolute;
-        bottom: 20px;
-        left: 20px;
-        right: 20px;
-    }
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+        }
 
-    .nav-item.logout {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        background: rgba(239, 68, 68, 0.1);
-        color: #f87171;
-        border: none;
-        padding: 10px 12px;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: 0.3s;
-        font-size: 14px;
-    }
+        .nav-item.logout {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            border: none;
+            padding: 10px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 14px;
+        }
 
-    .nav-item.logout:hover {
-        background: #ef4444;
-        color: white;
-    }
+        .nav-item.logout:hover {
+            background: #ef4444;
+            color: white;
+        }
 
         /* MAIN */
         .main {
@@ -144,7 +143,7 @@
             background: #fff;
             padding: 6px 12px;
             border-radius: 999px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
 
         /* AVATAR FIX */
@@ -191,6 +190,7 @@
 
     @stack('styles')
 </head>
+
 <body>
     {{-- SIDEBAR --}}
     <aside class="sidebar">

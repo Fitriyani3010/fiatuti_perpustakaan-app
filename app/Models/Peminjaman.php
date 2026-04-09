@@ -17,13 +17,13 @@ class Peminjaman extends Model
         'status',
         'denda',
         'bukti_pembayaran',
-    'status_pembayaran',
+        'status_pembayaran',
     ];
     protected $casts = [
         'tanggal_pinjam'       => 'date',
         'tanggal_kembali'      => 'date',
         'tanggal_dikembalikan' => 'date',
-    ];           
+    ];
     public function user()
     {
         return $this->belongsTo(User::class);

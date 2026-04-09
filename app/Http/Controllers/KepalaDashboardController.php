@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Buku;
 use App\Models\Peminjaman;
 use App\Models\User;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\DomPDF\Facade\pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 
 class KepalaDashboardController extends Controller
 {
-    // ================= DASHBOARD =================
+    //dashboard
     public function home()
     {
         $totalBuku = Buku::count();
@@ -34,7 +34,7 @@ class KepalaDashboardController extends Controller
         ));
     }
 
-    // ================= KELOLA PETUGAS =================
+    //kelola petugas
     public function petugas(Request $request)
     {
         $petugas = User::where('role', 'petugas')
@@ -48,7 +48,7 @@ class KepalaDashboardController extends Controller
         return view('kepala.petugas', compact('petugas'));
     }
 
-    // ================= TAMBAH PETUGAS =================
+    //tambah petugas
     public function storePetugas(Request $request)
     {
         $request->validate([
@@ -71,7 +71,7 @@ class KepalaDashboardController extends Controller
         return back()->with('success', 'Petugas berhasil ditambahkan');
     }
 
-    // ================= UPDATE PETUGAS =================
+    //update petugass
     public function updatePetugas(Request $request, $id)
     {
         $petugas = User::where('role', 'petugas')->findOrFail($id);
@@ -99,7 +99,7 @@ class KepalaDashboardController extends Controller
         return back()->with('success', 'Petugas berhasil diupdate');
     }
 
-    // ================= DELETE PETUGAS =================
+    //delete petugas
     public function deletePetugas($id)
     {
         $petugas = User::where('role', 'petugas')->findOrFail($id);
@@ -108,7 +108,7 @@ class KepalaDashboardController extends Controller
         return back()->with('success', 'Petugas berhasil dihapus');
     }
 
-    // ================= LAPORAN PEMINJAMAN =================
+    //laporan peminjaman
     public function laporanPeminjaman(Request $request)
     {
         $bulan = $request->bulan ?? Carbon::now()->month;
@@ -123,7 +123,7 @@ class KepalaDashboardController extends Controller
         return view('kepala.laporan.peminjaman', compact('data', 'bulan', 'tahun'));
     }
 
-    // ================= CETAK LAPORAN PEMINJAMAN =================
+    //cetak laporan peminjaman
      public function cetaklaporanPeminjaman(Request $request)
     {
         $bulan = $request->bulan ?? date('m');
@@ -137,7 +137,7 @@ class KepalaDashboardController extends Controller
         $pdf = pdf::loadView('kepala.laporan.cetak_peminjaman', compact('data', 'bulan', 'tahun'));
         return $pdf->stream('laporan-peminjaman-'.$bulan.'-'.$tahun.'.pdf');
     }
-    // ================= LAPORAN DENDA =================
+    //laporan denda
     public function laporanDenda()
     {
         $data = Peminjaman::with(['user','buku'])
@@ -148,7 +148,7 @@ class KepalaDashboardController extends Controller
         return view('kepala.laporan.denda', compact('data'));
     }
 
-    // ================= LAPORAN ANGGOTA =================
+    //laporan anggota
     public function laporanAnggota()
     {
         $data = User::where('role','user')->latest()->paginate(10);
