@@ -5,88 +5,117 @@
     <title>@yield('title', 'Dashboard Kepala')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #f1f5f9;
-        }
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #eae6e3;
+}
 
-        .dashboard {
-            display: flex;
-        }
+/* HEADER */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 70px;
 
-        /* SIDEBAR */
-        .sidebar {
-            width: 250px;
-            height: 100vh;
-            background: linear-gradient(180deg, #0f172a, #1e293b);
-            color: white;
-            padding: 20px;
-            position: fixed;
-        }
+    background: #6b3f24;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
+    color: white;
 
-        .sidebar h2 {
-            margin-bottom: 30px;
-        }
+    border-radius: 0 0 15px 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    z-index: 9999;
+}
 
-        .sidebar ul {
-            list-style: none;
-        }
+/* SIDEBAR */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 240px;
+    height: 100vh;
 
-        .sidebar ul li {
-            margin-bottom: 10px;
-        }
+    background: #6b3f24;
+    padding: 90px 15px 20px;
 
-        .sidebar ul li a {
-            display: block;
-            padding: 10px;
-            color: #cbd5f5;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: 0.3s;
-        }
+    border-radius: 0 20px 20px 0;
+}
 
-        .sidebar ul li a:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
+/* PROFILE */
+.sb-profile {
+    text-align: center;
+    margin-bottom: 25px;
+}
 
-        .active a {
-            background: #2563eb;
-            color: white;
-        }
+.sb-profile img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+}
 
-        /* MAIN */
-        .main {
-            margin-left: 250px;
-            padding: 30px;
-            width: 100%;
-        }
+.sb-profile h4 {
+    margin: 10px 0 5px;
+}
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            align-items: center;
-        }
+.sb-profile span {
+    background: #d97706;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+}
 
-        .header h1 {
-            font-size: 22px;
-        }
+/* MENU */
+.sb-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
-        /* USER NAME */
-        .user {
-            background: #fff;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
-        }
+.nav-item {
+    background: #8b5535;
+    padding: 12px;
+    border-radius: 10px;
+    color: white;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.nav-item:hover {
+    background: #a8643d;
+}
+
+.nav-item.active {
+    background: #c97a4a;
+}
+
+/* LOGOUT */
+.nav-item.logout {
+    background: #ef4444;
+}
+
+/* MAIN */
+.main {
+    margin-left: 260px;
+    padding: 100px 25px 25px;
+}
+
+/* USER */
+.user {
+    background: #ffffff20;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+}
 
         /* LOGOUT */
         .sb-bottom {
@@ -223,48 +252,75 @@
 </head>
 
 <body>
-    <div class="dashboard">
-        <div class="sidebar">
-            <h2>Kepala</h2>
-            <ul>
-                <li class="{{ request()->routeIs('kepala.home') ? 'active' : '' }}">
-                    <a href="{{ route('kepala.home') }}">Dashboard</a>
-                </li>
+   <body>
 
-                <li class="{{ request()->routeIs('kepala.petugas') ? 'active' : '' }}">
-                    <a href="{{ route('kepala.petugas') }}">Kelola Petugas</a>
-                </li>
-                <li class="{{ request()->routeIs('kepala.laporan.anggota') ? 'active' : '' }}">
-                    <a href="{{ route('kepala.laporan.anggota') }}"> Anggota</a>
-                </li>
-                <li class="{{ request()->routeIs('kepala.laporan.peminjaman') ? 'active' : '' }}">
-                    <a href="{{ route('kepala.laporan.peminjaman') }}"> Laporan Peminjaman</a>
-                </li>
+<!-- HEADER -->
+<div class="header">
+    <h3>📖 TreebanBooks</h3>
 
-                <li class="{{ request()->routeIs('kepala.laporan.denda') ? 'active' : '' }}">
-                    <a href="{{ route('kepala.laporan.denda') }}"> Laporan Denda</a>
-                </li>
-            </ul>
-            <div class="sb-bottom">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="nav-item logout">
-                        Logout
-                    </button>
-                </form>
-            </div>
-        </div>
-        <div class="main">
-            <div class="header">
-                <h1>@yield('title', 'Dashboard')</h1>
-                <div class="user">
-                    {{ auth()->user()->name }}
-                </div>
-            </div>
-            @yield('content')
-        </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+        
+
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" style="
+                background:#ef4444;
+                border:none;
+                padding:6px 14px;
+                border-radius:8px;
+                color:white;
+                cursor:pointer;
+            ">
+                Logout
+            </button>
+        </form>
     </div>
-    @yield('script')
+</div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+
+    <a href="{{ route('kepala.profile') }}" style="text-decoration:none; color:white;">
+    <div class="sb-profile" style="cursor:pointer;">
+        <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}">
+        <h4>{{ auth()->user()->name }}</h4>
+        <span>Kepala</span>
+    </div>
+</a>
+    <nav class="sb-nav">
+        <a href="{{ route('kepala.home') }}" class="nav-item {{ request()->routeIs('kepala.home') ? 'active' : '' }}">
+            🏠 Dashboard
+        </a>
+
+       <a href="{{ route('kepala.data_buku') }}" class="nav-item {{ request()->routeIs('kepala.data_buku') ? 'active' : '' }}">
+            📚 Data Buku
+        </a>
+
+        <a href="{{ route('kepala.petugas') }}" class="nav-item {{ request()->routeIs('kepala.petugas') ? 'active' : '' }}">
+            👨‍💼 Petugas
+        </a>
+
+        <a href="{{ route('kepala.laporan.anggota') }}" class="nav-item {{ request()->routeIs('kepala.laporan.anggota') ? 'active' : '' }}">
+            👥 Anggota
+        </a>
+
+        <a href="{{ route('kepala.laporan.peminjaman') }}" class="nav-item {{ request()->routeIs('kepala.laporan.peminjaman') ? 'active' : '' }}">
+            📦 Peminjaman
+        </a>
+
+        <a href="{{ route('kepala.laporan.denda') }}" class="nav-item {{ request()->routeIs('kepala.laporan.denda') ? 'active' : '' }}">
+            💰 Denda
+        </a>
+    </nav>
+
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+    @yield('content')
+</main>
+
+</body>
 </body>
 
 </html>

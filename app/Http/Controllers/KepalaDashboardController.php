@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Buku;
 use App\Models\Peminjaman;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Kategori;
 
 
 class KepalaDashboardController extends Controller
@@ -24,14 +26,40 @@ class KepalaDashboardController extends Controller
         $petugas = User::where('role', 'petugas')->latest()->take(5)->get();
         $bukuPopuler = Buku::latest()->take(5)->get();
 
-        return view('kepala.home', compact(
-            'totalBuku',
-            'totalAnggota',
-            'totalPeminjaman',
-            'totalDenda',
-            'petugas',
-            'bukuPopuler'
-        ));
+        $aktivitas = Peminjaman::latest()->take(5)->get();
+
+    // 🔥 TAMBAH INI
+    $statistik = Peminjaman::select(
+            DB::raw('DATE(created_at) as tanggal'),
+            DB::raw('COUNT(*) as pinjam'),
+            DB::raw('SUM(CASE WHEN status = "kembali" THEN 1 ELSE 0 END) as kembali')
+        )
+        ->groupBy('tanggal')
+        ->orderBy('tanggal','ASC')
+        ->get()
+        ->toArray();
+
+        // ===== CHART 7 HARI =====
+    $labels = [];
+    $chartData = [];
+
+    for ($i = 6; $i >= 0; $i--) {
+        $date = Carbon::now()->subDays($i)->format('Y-m-d');
+
+        $labels[] = Carbon::parse($date)->format('d M');
+
+        $chartData[] = Peminjaman::whereDate('created_at', $date)->count();
+    }
+
+    return view('kepala.home', compact(
+        'totalBuku',
+        'totalAnggota',
+        'totalPeminjaman',
+        'totalDenda',
+        'aktivitas',
+        'labels',
+        'chartData'
+    ));
     }
 
     //kelola petugas
@@ -149,9 +177,87 @@ class KepalaDashboardController extends Controller
     }
 
     //laporan anggota
-    public function laporanAnggota()
+    public function laporanAnggota(Request $request)
     {
-        $data = User::where('role','user')->latest()->paginate(10);
-        return view('kepala.laporan.anggota', compact('data'));
+        $query = User::where('role', 'user');
+
+    // SEARCH (nama / email)
+    if ($request->filled('search')) {
+        $query->where(function ($q) use ($request) {
+            $q->where('name', 'like', '%' . $request->search . '%')
+              ->orWhere('email', 'like', '%' . $request->search . '%');
+        });
     }
+
+    // FILTER KELAS
+    if ($request->filled('kelas')) {
+        $query->where('kelas', $request->kelas);
+    }
+
+    $data = $query->latest()->paginate(10)->withQueryString();
+
+    return view('kepala.laporan.anggota', compact('data'));
+    }
+
+    public function profile()
+{
+    $user = auth()->user();
+    return view('kepala.profile', compact('user'));
+}
+
+public function updateProfile(Request $request)
+{
+    $user = auth()->user();
+
+    $request->validate([
+        'name' => 'required',
+        'email' => 'required|email',
+    ]);
+
+    $user->update([
+        'name' => $request->name,
+        'email' => $request->email,
+        'nisn' => $request->nisn,
+        'no_telepon' => $request->no_telepon,
+        'alamat' => $request->alamat,
+    ]);
+
+    // upload foto
+    if ($request->hasFile('foto')) {
+        $file = $request->file('foto');
+        $namaFile = time() . '.' . $file->getClientOriginalExtension();
+        $file->storeAs('public/foto', $namaFile);
+
+        $user->update([
+            'foto' => $namaFile
+        ]);
+    }
+
+    return back()->with('success', 'Profil berhasil diupdate!');
+}
+
+public function dataBuku(Request $request)
+{
+    $query = Buku::with('kategori');
+
+   // SEARCH
+if ($request->filled('search')) {
+    $query->where('judul', 'like', '%' . $request->search . '%');
+}
+
+// FILTER KATEGORI
+if ($request->kategori) {
+    $query->where('kategori_id', $request->kategori);
+}
+    $dataBuku = $query->paginate(10);
+    $kategori = Kategori::all();
+
+    return view('kepala.data_buku', compact('dataBuku', 'kategori'));
+}
+public function detailBuku($id)
+{
+    $buku = Buku::with('kategori')->findOrFail($id);
+
+    return view('kepala.detail_buku', compact('buku'));
+}
 }

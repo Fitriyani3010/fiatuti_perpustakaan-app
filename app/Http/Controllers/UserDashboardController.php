@@ -16,6 +16,7 @@ class UserDashboardController extends Controller
     public function home(Request $request)
     {
         $user = Auth::user();
+        $totalBuku = Buku::count(); // 👈 ini yang hilang
 
         $bukuDipinjam = Peminjaman::where('user_id', $user->id)
             ->where('status', 'dipinjam')
@@ -37,6 +38,7 @@ class UserDashboardController extends Controller
             ->appends($request->only('kategori'));
 
         return view('user.home', compact(
+            'totalBuku',
             'bukuDipinjam',
             'totalPeminjaman',
             'dendaAktif',
@@ -271,33 +273,42 @@ class UserDashboardController extends Controller
             'user' => Auth::user()
         ]);
     }
-    public function updateProfile(Request $request)
-    {
+public function updateProfile(Request $request)
+{
+    $user = Auth::user();
 
-        $user = Auth::user();
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $user->id,
+        'no_telepon' => 'nullable|string|max:20',
+        'alamat' => 'nullable|string|max:255',
+        'kelas' => 'nullable|string|max:50', // 🔥 TAMBAHAN
+        'foto' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:20000',
+    ]);
 
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'no_telepon' => 'nullable|string|max:20',
-            'alamat' => 'nullable|string|max:255',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:20000',
-        ]);
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->no_telepon = $request->no_telepon;
-        $user->alamat = $request->alamat;
-        if ($request->hasFile('foto')) {
-            // Hapus foto lama jika ada
-            if ($user->foto && Storage::exists('public/foto/' . $user->foto)) {
-                Storage::delete('public/foto/' . $user->foto);
-            }
-            $fotoName = time() . '_' . $request->file('foto')->getClientOriginalName();
-            $request->file('foto')->storeAs('public/foto', $fotoName);
-            $user->foto = $fotoName;
+    // update data
+    $user->name = $request->name;
+    $user->email = $request->email;
+    $user->no_telepon = $request->no_telepon;
+    $user->alamat = $request->alamat;
+    $user->kelas = $request->kelas; // 🔥 TAMBAHAN
+
+    // upload foto
+    if ($request->hasFile('foto')) {
+
+        // hapus foto lama
+        if ($user->foto && Storage::exists('public/foto/' . $user->foto)) {
+            Storage::delete('public/foto/' . $user->foto);
         }
-        $user = Auth::user();
-        $user->save();
-        return back()->with('success', 'Profile updated successfully!');
+
+        $fotoName = time() . '_' . $request->file('foto')->getClientOriginalName();
+        $request->file('foto')->storeAs('public/foto', $fotoName);
+
+        $user->foto = $fotoName;
     }
+
+    $user->save();
+
+    return back()->with('success', 'Profile updated successfully!');
+}
 }

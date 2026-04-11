@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
@@ -22,6 +21,7 @@ class RegisterController extends Controller
             'email'                 => 'required|email|unique:users,email',
             'no_telepon'            => 'nullable|string|max:15',
             'alamat'                => 'nullable|string|max:500',
+            'nisn'                  => 'required|string|max:20',
             'password'              => 'required|min:6|confirmed',
             'password_confirmation' => 'required',
         ], [
@@ -40,11 +40,12 @@ class RegisterController extends Controller
             'role'       => 'user', // selalu user saat registrasi
             'no_telepon' => $request->no_telepon,
             'alamat'     => $request->alamat,
+            'nisn'       => $request->nisn,
         ]);
 
-        Auth::login($user);
+        
 
-        return redirect()->route('user.home')
-            ->with('success', 'Akun berhasil dibuat! Selamat datang, ' . $user->name . '.');
+        return redirect()->route('login')
+        ->with('success', 'Akun berhasil dibuat! Silakan login.');
     }
 }

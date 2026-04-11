@@ -67,7 +67,14 @@ Route::middleware(['auth', 'role:petugas'])
         Route::get('/denda', [PetugasDashboardController::class, 'denda'])->name('denda');
         Route::post('/denda/konfirmasi/{id}', [PetugasDashboardController::class, 'konfirmasi'])->name('konfirmasi');
         Route::post('/denda/tolak/{id}', [PetugasDashboardController::class, 'tolakPembayaran'])->name('tolak');
+        Route::get('/profile', [PetugasDashboardController::class, 'profile'])
+    ->name('profile');
+
+Route::post('/profile/update', [PetugasDashboardController::class, 'updateProfile'])
+    ->name('profile.update');
     });
+    Route::post('/denda/lunas/{id}', [PetugasDashboardController::class, 'lunaskan'])
+    ->name('petugas.lunaskan');
 // kepala perpustakaan
 Route::middleware(['auth', 'role:kepala_perpustakaan'])
     ->prefix('dashboard/kepala')
@@ -91,3 +98,17 @@ Route::middleware(['auth', 'role:kepala_perpustakaan'])
         Route::get('/laporan/peminjaman/cetak', [KepalaDashboardController::class, 'cetaklaporanPeminjaman'])
             ->name('laporan.peminjaman.cetak');
     });
+
+Route::get('/kepala/profile', [KepalaDashboardController::class, 'profile'])->name('kepala.profile');
+Route::post('/kepala/profile', [KepalaDashboardController::class, 'updateProfile'])->name('kepala.profile.update');
+Route::get('/kepala/data-buku', [KepalaDashboardController::class, 'dataBuku'])
+    ->name('kepala.data-buku');
+
+Route::prefix('kepala')->name('kepala.')->group(function () {
+
+    Route::get('/data-buku', [KepalaDashboardController::class, 'dataBuku'])
+        ->name('data_buku');
+         Route::get('/data-buku/{id}', [KepalaDashboardController::class, 'detailBuku'])
+        ->name('detail_buku'); // ⬅️ INI PENTING
+
+});

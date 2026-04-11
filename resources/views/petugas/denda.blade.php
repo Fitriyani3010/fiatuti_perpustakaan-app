@@ -3,93 +3,138 @@
 @section('content')
     <style>
         .page-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #4b2e1e;
+}
 
-        .denda-card {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white;
-            padding: 20px;
-            border-radius: 16px;
-            margin-bottom: 20px;
-        }
+/* CARD TOTAL DENDA */
+.denda-card {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    padding: 22px;
+    border-radius: 18px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 25px rgba(239,68,68,0.25);
+    width: 45%;
+}
 
-        .table-box {
-            background: #fff;
-            padding: 20px;
-            border-radius: 16px;
-        }
+.denda-card h3 {
+    font-size: 14px;
+    opacity: 0.9;
+}
 
-        .badge {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            color: white;
-            border: none;
-        }
+.denda-card h1 {
+    font-size: 28px;
+    margin-top: 5px;
+}
 
-        .btn {
-            padding: 6px 10px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-size: 12px;
-        }
+/* TABLE BOX */
+.table-box {
+    background: #fff;
+    padding: 20px;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
 
-        .red {
-            background: #ef4444;
-            color: white;
-        }
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
-        .green {
-            background: #10b981;
-            color: white;
-        }
+th {
+    text-align: left;
+    padding: 14px;
+    background: #f3eae5;
+    color: #6b3f24;
+    font-weight: 600;
+    font-size: 14px;
+}
 
-        .orange {
-            background: #f59e0b;
-            color: white;
-        }
+td {
+    padding: 14px;
+    font-size: 14px;
+    border-bottom: 1px solid #f1f1f1;
+}
 
-        /* IMAGE */
-        .img-preview {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
+tr:hover {
+    background: #faf6f3;
+    transition: 0.2s;
+}
 
-        .img-preview:hover {
-            transform: scale(1.1);
-        }
+/* BADGE */
+.badge {
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    color: #fff;
+}
 
-        /* MODAL IMAGE */
-        .modal-img {
-            display: none;
-            position: fixed;
-            z-index: 999;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.7);
-        }
+.orange { background: #f59e0b; }
+.green { background: #10b981; }
+.red { background: #ef4444; }
 
-        .modal-img img {
-            display: block;
-            max-width: 90%;
-            max-height: 80%;
-            margin: 5% auto;
-            border-radius: 10px;
-        }
+/* BUTTON */
+.btn {
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: none;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+}
 
-        /* PAGINATION */
-        .pagination-wrapper {
-            display: flex;
-            justify-content: center;
-            margin-top: 25px;
-        }
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+}
+
+/* GROUP BUTTON */
+.action-group {
+    display: flex;
+    gap: 6px;
+}
+
+/* IMAGE */
+.img-preview {
+    width: 55px;
+    height: 55px;
+    object-fit: cover;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.img-preview:hover {
+    transform: scale(1.1);
+}
+
+/* MODAL IMAGE */
+.modal-img {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.modal-img img {
+    display: block;
+    max-width: 90%;
+    max-height: 80%;
+    margin: 5% auto;
+    border-radius: 12px;
+}
+
+/* PAGINATION */
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+}
     </style>
 
     <h4 class="page-title">Kelola Denda</h4>
@@ -107,8 +152,7 @@
                     <th>Buku</th>
                     <th>Terlambat</th>
                     <th>Total</th>
-                    <th>Metode</th>
-                    <th>Bukti</th>
+                   
                     <th>Status</th>
                     <th>Aksi</th> 
                 </tr>
@@ -122,26 +166,8 @@
                         <td>{{ $item->terlambat }} Hari</td>
                         <td>Rp {{ number_format($item->total_denda, 0, ',', '.') }}</td>
 
-                        {{-- METODE --}}
-                        <td>
-                            @if ($item->metode_pembayaran == 'online')
-                                <span class="badge orange">Online</span>
-                            @elseif($item->metode_pembayaran == 'offline')
-                                <span class="badge green">Offline</span>
-                            @else
-                                <span style="color:#9ca3af;">-</span>
-                            @endif
-                        </td>
-
-                        {{-- BUKTI --}}
-                        <td>
-                            @if ($item->bukti_pembayaran)
-                                <img src="{{ asset('storage/' . $item->bukti_pembayaran) }}" class="img-preview"
-                                    onclick="showImage(this.src)">
-                            @else
-                                <span style="color:#9ca3af;">Tidak ada</span>
-                            @endif
-                        </td>
+                        
+                     
 
                         {{-- STATUS --}}
                         <td>
@@ -155,29 +181,19 @@
                         </td>
 
                         {{-- AKSI --}}
-                        <td>
-                            @if ($item->status_pembayaran == 'menunggu')
-                                {{-- KONFIRMASI --}}
-                                <form action="{{ route('petugas.konfirmasi', $item->id) }}" method="POST"
-                                    style="display:inline;">
-                                    @csrf
-                                    <button class="btn green" onclick="return confirm('Konfirmasi pembayaran ini?')">
-                                        ✔️
-                                    </button>
-                                </form>
-
-                                {{-- TOLAK --}}
-                                <form action="{{ route('petugas.tolak', $item->id) }}" method="POST"
-                                    style="display:inline;">
-                                    @csrf
-                                    <button class="btn red" onclick="return confirm('Tolak pembayaran ini?')">
-                                        ✖
-                                    </button>
-                                </form>
-                            @else
-                                <span style="color:#9ca3af;">-</span>
-                            @endif
-                        </td>
+                       <td>
+    @if ($item->status_pembayaran != 'lunas')
+        <form action="{{ route('petugas.lunaskan', $item->id) }}" method="POST">
+            @csrf
+            <button class="btn green"
+                onclick="return confirm('Tandai denda ini sudah dibayar?')">
+                Bayar (Offline)
+            </button>
+        </form>
+    @else
+        <span style="color:#10b981;">✔ Lunas</span>
+    @endif
+</td>
 
                     </tr>
                 @empty

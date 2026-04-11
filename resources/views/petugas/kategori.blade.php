@@ -1,84 +1,151 @@
 @extends('petugas.layouts.app')
 
 @section('content')
-    <style>
-        .page-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
+   <style>
+   .page-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #374151;
+}
 
-        /* CARD */
-        .card {
-            background: #fff;
-            padding: 20px;
-            border-radius: 16px;
-            margin-bottom: 20px;
-        }
+/* GRID BIAR LAYOUT BAGUS */
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+      gap: 30px; /* 🔥 ini yang bikin renggang */
+    gap: 0;
+}
 
-        /* INPUT */
-        .input-group {
-            display: flex;
-            gap: 10px;
-        }
+/* CARD */
+.card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    transition: 0.3s;
+        border: 1px solid #f1f1f1;
+        margin-bottom: 20px;
+   
+}
 
-        .input-group input {
-            flex: 1;
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid #e5e7eb;
-        }
+/* CARD */
+.card1 {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    transition: 0.3s;
+    width:50%;
+    margin-bottom: 20px;
+}
 
-        .input-group button {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
 
-        /* TABLE */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+.card:hover {
+    transform: translateY(-2px);
+}
 
-        th {
-            text-align: left;
-            font-size: 14px;
-            color: #6b7280;
-            padding: 10px;
-        }
+/* TITLE CARD */
+.card h5 {
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #6b3f24;
+}
 
-        td {
-            padding: 12px 10px;
-        }
+/* INPUT */
+.input-group {
+    display: flex;
+    gap: 10px;
+    width: 50%;
+}
 
-        tbody tr {
-            border-top: 1px solid #e5e7eb;
-        }
+.input-group input {
+    flex: 1;
+    padding: 12px;
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    outline: none;
+    transition: 0.2s;
+}
 
-        /* BUTTON */
-        .btn-delete {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
+.input-group input:focus {
+    border-color: #6b3f24;
+    box-shadow: 0 0 0 3px rgba(107, 63, 36, 0.1);
+}
 
-        /* EMPTY */
-        .empty {
-            text-align: center;
-            padding: 20px;
-            color: #9ca3af;
-        }
-    </style>
+/* BUTTON TAMBAH */
+.input-group button {
+    background: #6b3f24;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.input-group button:hover {
+    background: #7a4a2a;
+}
+
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+/* HEADER */
+th {
+    background: #6b3f24;
+    color: white;
+    padding: 14px;
+    text-align: left;
+    font-size: 14px;
+}
+
+/* ISI */
+td {
+    padding: 14px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+/* ROW HOVER */
+tbody tr {
+    transition: 0.2s;
+}
+
+tbody tr:hover {
+    background: #f9f6f3;
+}
+
+/* BUTTON DELETE */
+.btn-delete {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: 0.2s;
+}
+
+.btn-delete:hover {
+    background: #dc2626;
+}
+
+/* EMPTY */
+.empty {
+    text-align: center;
+    padding: 25px;
+    color: #9ca3af;
+}
+</style>
     <h4 class="page-title">Kelola Kategori</h4>
     {{-- FORM TAMBAH --}}
-    <div class="card">
+    <div class="card1">
         <h5>Tambah Kategori</h5>
         <form method="POST" action="{{ route('petugas.kategori.store') }}">
             @csrf

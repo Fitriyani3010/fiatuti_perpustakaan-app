@@ -4,216 +4,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perpustakaan Digital</title>
+    <title>ThreebanBooks</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Libre+Baskerville&display=swap" rel="stylesheet">
 </head>
+
 <style>
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: 'Poppins', sans-serif;
     }
 
     body {
-        background: #f6f7fb;
-        color: #1e293b;
-        padding: 30px 60px;
+        background: #f4ede4;
+        font-family: 'Libre Baskerville', serif;
+        color: #3e2c1c;
     }
 
-    /* Navbar */
     .navbar {
+        background: #3e2c1c;
+        color: #f4ede4;
+        padding: 20px 60px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 60px;
+        border-bottom: 3px solid #c8a96a;
     }
 
     .logo {
+        font-family: 'Playfair Display', serif;
+        font-size: 22px;
         font-weight: 600;
-        font-size: 18px;
-    }
-
-    .logo span {
-        margin-left: 5px;
     }
 
     .login a {
+        color: #f4ede4;
         text-decoration: none;
-        color: #64748b;
-        font-weight: 500;
+        border: 1px solid #c8a96a;
+        padding: 8px 18px;
+        border-radius: 6px;
+        transition: 0.3s;
     }
 
-    /* Hero */
+    .login a:hover {
+        background: #c8a96a;
+        color: #3e2c1c;
+    }
+
     .hero {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 80px;
+        text-align: center;
+        padding: 70px 20px;
+        border-bottom: 2px dashed #c8a96a;
     }
 
-    .hero-left {
-        width: 50%;
+    .hero h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 36px;
+        margin-bottom: 10px;
     }
 
-    .hero-left h1 {
-        font-size: 42px;
-        font-weight: 700;
-        margin-bottom: 20px;
+    .hero p {
+        max-width: 600px;
+        margin: auto;
+        font-size: 14px;
+        line-height: 1.7;
+        color: #5c4433;
     }
 
-    .hero-left p {
-        color: #64748b;
-        margin-bottom: 30px;
-        line-height: 1.6;
+    .search-box {
+        margin-top: 25px;
     }
 
     .search-box input {
-        width: 80%;
-        padding: 14px 20px;
-        border-radius: 30px;
-        border: 1px solid #e2e8f0;
-        margin-bottom: 20px;
+        width: 300px;
+        padding: 10px 16px;
+        border: 1px solid #c8a96a;
+        border-radius: 20px;
+        background: #fffaf3;
         outline: none;
     }
 
-    .btn-primary {
-        padding: 12px 28px;
-        border: none;
-        border-radius: 8px;
-        background: #2563eb;
-        color: white;
-        font-weight: 500;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-    .btn-primary:hover {
-        background: #1e40af;
-    }
-
-    .hero-right {
-        position: relative;
-        width: 40%;
-        height: 320px;
-    }
-
-    .card {
-        position: absolute;
-        width: 280px;
-        height: 360px;
-        border-radius: 28px;
-        background: #dbe1ea;
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
-    }
-
-    .stack-1 {
-        top: 0;
-        left: 40px;
-        overflow: hidden;
-    }
-
-    .stack-2 {
-        top: 40px;
-        left: 90px;
-        overflow: hidden;
-    }
-
-    .stack-3 {
-        top: 80px;
-        left: 140px;
-        overflow: hidden;
-    }
-
-    .image-card img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-    }
-
-    /* Popular Section */
-    .popular h2 {
-        font-size: 22px;
-        margin-bottom: 25px;
-    }
-
-    .book-list {
-        display: flex;
-        gap: 50px;
-    }
-
-    .book-item {
-        background: #ffffff;
-        padding: 25px 45px;
-        border-radius: 12px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    .info {
+        text-align: center;
+        padding: 30px;
         font-size: 14px;
-        cursor: pointer;
-        transition: 0.3s;
-        align-items: center;
-
+        color: #6b4f3b;
     }
 
-    .book-item:hover {
-        transform: translateY(-5px);
+    .bookshelf {
+        padding: 50px 60px;
+    }
+
+    .bookshelf h2 {
+        font-family: 'Playfair Display', serif;
+        margin-bottom: 25px;
+        border-left: 5px solid #c8a96a;
+        padding-left: 10px;
+    }
+
+    .book-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+
+    .book-card {
+        background: #fffaf3;
+        border: 1px solid #e0d6c8;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+        transition: 0.3s;
+    }
+
+    .book-card:hover {
+        transform: translateY(-4px);
+    }
+
+    .book-card img {
+        width: 100%;
+        height: 170px;
+        object-fit: cover;
+        border-radius: 6px;
+        margin-bottom: 8px;
+    }
+
+    .book-title {
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    .book-author {
+        font-size: 12px;
+        color: #7a5c45;
+    }
+
+    footer {
+        text-align: center;
+        padding: 20px;
+        border-top: 1px solid #c8a96a;
+        font-size: 12px;
+        margin-top: 40px;
     }
 </style>
 
 <body>
 
-    <!-- Navbar -->
+    <!-- NAVBAR -->
     <nav class="navbar">
-        <div class="logo">
-            📚 <span>Perpustakaan Digital</span>
-        </div>
+        <div class="logo">📚 ThreebanBooks</div>
         <div class="login">
             <a href="{{ route('login') }}">Login</a>
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- HERO -->
     <section class="hero">
-        <div class="hero-left">
-            <h1>Temukan Buku Terbaik <br>Untuk Masa Depanmu</h1>
-            <p>
-                Koleksi buku lengkap, sistem modern, dan pengalaman membaca yang
-                lebih nyaman dan profesional.
-            </p>
+        <h1>Perpustakaan Digital Sekolah</h1>
+        <p>
+            ThreebanBooks adalah sistem perpustakaan digital untuk membantu siswa mengakses buku pelajaran
+            dan referensi dengan lebih mudah dan terorganisir.
+        </p>
 
-            <div class="search-box">
-                <input type="text" placeholder="Cari buku, pengarang, kategori...">
+        
+    </section>
+
+    <!-- INFO -->
+    <div class="info">
+        Mendukung kegiatan literasi sekolah dan meningkatkan minat baca siswa.
+    </div>
+
+    <!-- BOOKS -->
+    <section class="bookshelf">
+        <h2>Buku Rekomendasi</h2>
+
+        <div class="book-grid">
+
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f" alt="">
+                <div class="book-title">Bahasa Indonesia</div>
+                <div class="book-author">Kelas X</div>
             </div>
 
-            <button class="btn-primary">Mulai Jelajahi</button>
-        </div>
-
-        <div class="hero-right">
-            <div class="card stack-1 image-card">
-                <img src="{{ asset('images/programmer.jpg') }}" alt="Book">
-            </div>
-            <div class="card stack-2 image-card">
-                <img src="{{ asset('images/Ui.jpg') }}" alt="Book">
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1509228468518-180dd4864904" alt="">
+                <div class="book-title">Matematika Dasar</div>
+                <div class="book-author">Kelas XI</div>
             </div>
 
-            <div class="card stack-3 image-card">
-                <img src="{{ asset('images/2.jpg') }}" alt="Book">
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1519682337058-a94d519337bc" alt="">
+                <div class="book-title">Sejarah Indonesia</div>
+                <div class="book-author">Kelas XII</div>
             </div>
-        </div>
-        </div>
+
+            <div class="book-card">
+                <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794" alt="">
+                <div class="book-title">Pemrograman Web</div>
+                <div class="book-author">Produktif</div>
+            </div>
+
         </div>
     </section>
 
-    <!-- Popular Books -->
-    <section class="popular">
-        <h2>Buku Populer</h2>
-
-        <div class="book-list">
-            <div class="book-item">Belajar Laravel Modern</div>
-            <div class="book-item">Mastering MySQL</div>
-            <div class="book-item">UI UX Design Expert</div>
-            <div class="book-item">Pemrograman Web Profesional</div>
-        </div>
-    </section>
+    <!-- FOOTER -->
+    <footer>
+        © 2026 ThreebanBooks — Perpustakaan Digital Sekolah
+    </footer>
 
 </body>
 

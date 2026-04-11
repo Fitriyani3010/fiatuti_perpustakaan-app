@@ -5,174 +5,212 @@
 @section('content')
 
     <style>
-        .header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
+       body {
+    background: #eae6e3;
+}
 
-        .actions {
-            display: flex;
-            gap: 10px;
-        }
+/* HEADER */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
 
-        .actions input {
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        }
+.header h1 {
+    font-size: 22px;
+    font-weight: 700;
+}
 
-        .table-box {
-            background: #fff;
-            padding: 20px;
-            border-radius: 14px;
-        }
+/* SEARCH */
+.actions {
+    display: flex;
+    gap: 10px;
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+.actions input {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    outline: none;
+}
 
-        th,
-        td {
-            padding: 12px;
-            font-size: 14px;
-        }
+/* BUTTON */
+.btn {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
 
-        th {
-            background: #f8fafc;
-            color: #64748b;
-            text-align: left;
-        }
+.btn:hover {
+    transform: translateY(-2px);
+}
 
-        tr {
-            border-bottom: 1px solid #eee;
-        }
+/* ALERT */
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
 
-        .action-group {
-            display: flex;
-            gap: 8px;
-        }
+/* CARD TABLE */
+.table-box {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    overflow-x: auto;
+}
 
-        .edit {
-            background: #fef9c3;
-            color: #ca8a04;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 999px;
-            cursor: pointer;
-        }
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    font-size: 14px;
+}
 
-        .hapus {
-            background: #ff2828;
-            color: #ffffff;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 999px;
-            cursor: pointer;
-        }
+/* HEADER TABLE */
+th {
+    background: #d6c2b5;
+    color: #333;
+    padding: 12px;
+    font-weight: 600;
+}
 
-        .btn {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
+/* ISI TABLE */
+td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
 
-        /* PAGINATION */
-        .pagination-wrapper {
-            display: flex;
-            justify-content: center;
-            margin-top: 25px;
-        }
+/* HOVER */
+tbody tr:hover {
+    background: #f9f6f3;
+}
 
-        .pagination {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
+/* COVER */
+td img {
+    width: 45px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+}
 
-        .pagination li {
-            list-style: none;
-        }
+/* AKSI */
+.action-group {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
 
-        .pagination a,
-        .pagination span {
-            min-width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 500;
-            text-decoration: none;
-            border: 1px solid #e2e8f0;
-            background: #ffffff;
-            color: #334155;
-            transition: all 0.2s ease;
-        }
+/* BUTTON AKSI */
+.edit {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
 
-        /* hover effect */
-        .pagination a:hover {
-            background: #2563eb;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 14px rgba(37, 99, 235, 0.25);
-        }
+.hapus {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
 
-        /* active */
-        .pagination .active span {
-            background: linear-gradient(135deg, #2563eb, #1e40af);
-            color: white;
-            border: none;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
-        }
+/* FORCE FIX PAGINATION */
+.pagination {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    margin: 20px 0;
+}
 
-        /* disabled */
-        .pagination .disabled span {
-            background: #f1f5f9;
-            color: #94a3b8;
-            cursor: not-allowed;
-        }
+.pagination li {
+    list-style: none !important;
+    display: inline-block;
+}
 
-        /* prev next icon */
-        .pagination li:first-child a,
-        .pagination li:last-child a {
-            font-weight: bold;
-        }
+.pagination li a,
+.pagination li span {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+    border-radius: 8px;
+    border: 1px solid #d6c2b5;
+    background: #fff;
+    color: #6b3f24;
+    font-size: 13px;
+    text-decoration: none;
+}
 
-        /* MODAL */
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
+.pagination li a:hover {
+    background: #6b3f24;
+    color: #fff;
+}
 
-        .modal form {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            width: 400px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+.pagination .active span {
+    background: #6b3f24;
+    color: white;
+    border-color: #6b3f24;
+}
 
-        .modal input,
-        .modal select,
-        .modal textarea {
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        }
+.pagination .disabled span {
+    opacity: 0.4;
+}
+
+/* MODAL */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal form {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: fadeIn 0.3s;
+}
+
+.modal input,
+.modal select,
+.modal textarea {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
     </style>
-    <div class="header">
+    <div class="page-header">
         <h1>Kelola Buku</h1>
         {{-- search --}}
         <div class="actions">
@@ -184,7 +222,7 @@
     </div>
 
     @if (session('success'))
-        <div style="background:#dcfce7;padding:10px;border-radius:8px;margin-bottom:10px;">
+       <div class="alert-success">
             {{ session('success') }}
         </div>
     @endif
@@ -250,7 +288,7 @@
         </div>
     </div>
     {{-- pagination --}}
-    <div class="pagination-wrapper">
+    <div class="pagination">
         {{ $bukus->links() }}
     </div>
     {{-- MODAL --}}

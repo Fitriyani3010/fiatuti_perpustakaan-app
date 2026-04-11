@@ -1,302 +1,235 @@
 @extends('user.layouts.app')
 
 @section('content')
-    <style>
-        .main-content {
-            padding: 25px;
-        }
 
-        /* CARD */
-        .card-denda {
-            background: linear-gradient(135deg, #3b82f6, #1e40af);
-            color: white;
-            padding: 25px;
-            border-radius: 16px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        }
+<style>
+.main-content {
+    padding: 25px;
+    background: #f5efe6;
+    min-height: 100vh;
+   
+}
 
-        .card-denda h2 {
-            font-size: 28px;
-            margin-top: 10px;
-        }
+/* TABLE CARD (VINTAGE) */
+.card-table {
+    background: #fffaf3;
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid #e6d3b3;
+    box-shadow: 0 6px 18px rgba(101, 67, 33, 0.15);
+}
 
-        /* TABLE */
-        .card-table {
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-        }
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+/* HEADER */
+thead {
+    background: #6b3f24;
+    color: #fff;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
 
-        thead {
-            background: #f3f4f6;
-            font-size: 13px;
-            text-transform: uppercase;
-        }
+th {
+    padding: 14px;
+    text-align: left;
+}
 
-        th,
-        td {
-            padding: 14px;
-        }
+/* BODY */
+td {
+    padding: 14px;
+    font-size: 14px;
+    color: #4b2e1e;
+}
 
-        tbody tr {
-            border-top: 1px solid #e5e7eb;
-            transition: 0.2s;
-        }
+/* GARIS HALUS */
+tbody tr {
+    border-bottom: 1px dashed #d6c2a8;
+}
 
-        tbody tr:hover {
-            background: #f9fafb;
-        }
+/* HOVER */
+tbody tr:hover {
+    background: #f3e8d9;
+    transition: 0.2s;
+}
 
-        /* BADGE */
-        .badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            color: white;
-        }
+/* BADGE */
+.badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
 
-        .merah {
-            background: #ef4444;
-        }
+.merah { background: #a94442; }
+.hijau { background: #6b8e23; }
+.orange { background: #c68c2c; }
 
-        .hijau {
-            background: #10b981;
-        }
+/* BUTTON */
+.btn-bayar {
+    background: linear-gradient(135deg, #8b5e3c, #5c3a21);
+    color: white;
+    border: none;
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+}
 
-        .orange {
-            background: #f59e0b;
-        }
+.btn-bayar:hover {
+    transform: translateY(-2px);
+    background: #4b2e1e;
+}
 
-        /* BUTTON */
-        .btn-bayar {
-            background: linear-gradient(to right, #3b82f6, #2563eb);
-            color: white;
-            border: none;
-            padding: 7px 14px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: 0.2s;
-            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
-        }
+/* EMPTY */
+.empty {
+    text-align: center;
+    padding: 20px;
+    color: #7a5c3e;
+}
 
-        .btn-bayar:hover {
-            transform: translateY(-2px);
-        }
+/* MODAL (VINTAGE) */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
 
-        /* MODAL */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 999;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(6px);
-        }
+.modal-content {
+    background: #fffaf3;
+    width: 420px;
+    max-width: 90%;
+    margin: 6% auto;
+    padding: 25px;
+    border-radius: 16px;
+    border: 1px solid #e6d3b3;
+}
 
-        .modal-content {
-            background: white;
-            width: 420px;
-            max-width: 90%;
-            margin: 6% auto;
-            padding: 25px;
-            border-radius: 18px;
-            animation: fadeIn 0.3s ease;
-        }
+.modal-close {
+    float: right;
+    cursor: pointer;
+}
 
-        @keyframes fadeIn {
-            from {
-                transform: translateY(20px);
-                opacity: 0;
-            }
+/* INPUT */
+select,
+input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #d6c2a8;
+    margin-top: 5px;
+    background: #fff;
+}
 
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
+/* BUTTON MODAL */
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
 
-        .modal-close {
-            float: right;
-            cursor: pointer;
-            font-size: 18px;
-        }
+.btn-primary {
+    flex: 1;
+    background: #6b3f24;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+}
 
-        /* INPUT */
-        select,
-        input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid #e5e7eb;
-            margin-top: 5px;
-        }
+.btn-secondary {
+    flex: 1;
+    background: #e6d3b3;
+    border: none;
+    border-radius: 8px;
+}
+</style>
 
-        /* BUTTON MODAL */
-        .modal-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
+<div class="main-content">
 
-        .btn-primary {
-            flex: 1;
-            background: linear-gradient(to right, #3b82f6, #2563eb);
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 10px;
-        }
-
-        .btn-secondary {
-            flex: 1;
-            background: #e5e7eb;
-            padding: 10px;
-            border: none;
-            border-radius: 10px;
-        }
-    </style>
-
-    <div class="main-content">
-
-        @if (session('success'))
-            <div style="background:#d1fae5; padding:10px; border-radius:8px; margin-bottom:10px;">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div style="background:#fee2e2; padding:10px; border-radius:8px; margin-bottom:10px;">
-                {{ session('error') }}
-            </div>
-        @endif
-
-        <div class="card-denda">
-            <h5>Total Denda Aktif</h5>
-            <h2>Rp {{ number_format($totalDenda, 0, ',', '.') }}</h2>
+    @if (session('success'))
+        <div style="background:#e6fffa; padding:10px; border-radius:8px; margin-bottom:10px;">
+            {{ session('success') }}
         </div>
+    @endif
 
-        <div class="card-table">
-            <table>
-                <thead>
+    @if (session('error'))
+        <div style="background:#ffe4e6; padding:10px; border-radius:8px; margin-bottom:10px;">
+            {{ session('error') }}
+        </div>
+    @endif
+
+    <!-- TABLE -->
+    <div class="card-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Judul Buku</th>
+                    <th>Terlambat</th>
+                    <th>Total Denda</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @forelse($denda as $item)
                     <tr>
-                        <th>Judul Buku</th>
-                        <th>Terlambat</th>
-                        <th>Total Denda</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
+                        <td><strong>{{ $item->buku->judul ?? '-' }}</strong></td>
+                       @php
+                            $terlambat = 0;
+
+                            if ($item->tenggat_waktu) {
+                                $selisih = \Carbon\Carbon::parse($item->tenggat_waktu)->diffInDays(now(), false);
+
+                                if ($selisih > 0) {
+                                    $terlambat = $selisih;
+                                }
+                            }
+                        @endphp
+
+<td>{{ $terlambat }} Hari</td>
+                        <td>Rp {{ number_format($item->denda, 0, ',', '.') }}</td>
+
+                        <td>
+                            @if ($item->status_pembayaran == 'belum')
+                                <span class="badge merah">Belum</span>
+                            @elseif($item->status_pembayaran == 'menunggu')
+                                <span class="badge orange">Menunggu</span>
+                            @else
+                                <span class="badge hijau">Lunas</span>
+                            @endif
+                        </td>
+
+                        <td>
+    @if ($item->status_pembayaran == 'belum')
+        <span style="color:black;">Bayar di petugas</span>
+    @elseif($item->status_pembayaran == 'menunggu')
+        <span style="color:#c68c2c;">Menunggu verifikasi</span>
+    @else
+        <span style="color:#6b8e23;">Lunas</span>
+    @endif
+</td>
                     </tr>
-                </thead>
-
-                <tbody>
-                    @forelse($denda as $item)
-                        <tr>
-                            <td>{{ $item->buku->judul ?? '-' }}</td>
-                            <td>{{ $item->terlambat ?? 0 }} Hari</td>
-                            <td>Rp {{ number_format($item->denda, 0, ',', '.') }}</td>
-                            <td>
-                                @if ($item->status_pembayaran == 'belum')
-                                    <span class="badge merah">Belum</span>
-                                @elseif($item->status_pembayaran == 'menunggu')
-                                    <span class="badge orange"> Menunggu</span>
-                                @else
-                                    <span class="badge hijau"> Lunas</span>
-                                @endif
-                            </td>
-                            <td>
-                                @if ($item->denda > 0 && $item->status_pembayaran == 'belum')
-                                    <button class="btn-bayar" onclick="openModal({{ $item->id }}, {{ $item->denda }})">
-                                        Bayar
-                                    </button>
-                                @elseif($item->status_pembayaran == 'menunggu')
-                                    <span style="color:orange;">Menunggu verifikasi</span>
-                                @else
-                                    <span style="color:green;">Lunas</span>
-                                @endif
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" style="text-align:center;">Tidak ada denda</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-
+                @empty
+                    <tr>
+                        <td colspan="5" class="empty">
+                            Tidak ada denda
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
 
-    <!-- MODAL -->
-    <div id="modalBayar" class="modal" onclick="outsideClick(event)">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeModal()">✖</span>
-            <h3>Bayar Denda</h3>
-            <p style="font-size:13px; color:#6b7280;">
-                Pilih metode pembayaran. Jika online, upload bukti pembayaran.
-            </p>
-            <h2 id="totalBayar">Rp 0</h2>
-            <form id="formBayar" method="POST" enctype="multipart/form-data">
-                @csrf
-                <label>Metode Pembayaran</label>
-                <select name="metode" id="metode" onchange="toggleBukti()" required>
-                    <option value="">-- Pilih Metode --</option>
-                    <option value="offline">Bayar Offline</option>
-                    <option value="online">Bayar Online</option>
-                </select>
-                <div id="buktiField" style="display:none; margin-top:10px;">
-                    <label>Upload Bukti</label>
-                    <input type="file" name="bukti" id="bukti">
-                </div>
-                <div class="modal-actions">
-                    <button type="submit" class="btn-primary">Kirim</button>
-                    <button type="button" class="btn-secondary" onclick="closeModal()">Batal</button>
-                </div>
-            </form>
-        </div>
-    </div>
+</div>
 
-    <script>
-        function openModal(id, denda) {
-            document.getElementById('modalBayar').style.display = 'block';
-            document.getElementById('totalBayar').innerText =
-                'Rp ' + denda.toLocaleString('id-ID');
-            let url = "{{ route('user.bayar', ':id') }}";
-            url = url.replace(':id', id);
-            document.getElementById('formBayar').action = url;
-            document.getElementById('metode').value = "";
-            document.getElementById('bukti').value = "";
-            document.getElementById('buktiField').style.display = 'none';
-        }
-
-        function closeModal() {
-            document.getElementById('modalBayar').style.display = 'none';
-        }
-
-        function outsideClick(event) {
-            if (event.target.id === 'modalBayar') {
-                closeModal();
-            }
-        }
-
-        function toggleBukti() {
-            let metode = document.getElementById('metode').value;
-            let buktiField = document.getElementById('buktiField');
-            let buktiInput = document.getElementById('bukti');
-            if (metode === 'online') {
-                buktiField.style.display = 'block';
-                buktiInput.required = true;
-            } else {
-                buktiField.style.display = 'none';
-                buktiInput.required = false;
-                buktiInput.value = "";
-            }
-        }
-    </script>
 @endsection

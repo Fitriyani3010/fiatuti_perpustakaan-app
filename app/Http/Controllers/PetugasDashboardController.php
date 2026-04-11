@@ -247,7 +247,7 @@ class PetugasDashboardController extends Controller
         $p->update([
             'status' => 'dipinjam',
             'tanggal_pinjam' => now(),
-            'tanggal_kembali' => now()->addDays(1),
+            'tanggal_kembali' => now()->addDays(3),
         ]);
 
         $p->buku->decrement('stok', $p->jumlah);
@@ -299,8 +299,7 @@ class PetugasDashboardController extends Controller
 
             $terlambat = 0;
             $denda = $item->denda;
-
-            if ($item->status == 'dipinjam') {
+        if ($item->tanggal_kembali)  {
                 $batas = Carbon::parse($item->tanggal_kembali);
 
                 if (now()->gt($batas)) {
@@ -346,4 +345,27 @@ class PetugasDashboardController extends Controller
 
         return back()->with('error', 'Pembayaran ditolak');
     }
+    public function profile()
+{
+    $user = auth()->user();
+    return view('petugas.profile', compact('user'));
+}
+
+public function updateProfile(Request $request)
+{
+    $user = auth()->user();
+
+    $user->update($request->all());
+
+    return back()->with('success', 'Profil berhasil diupdate');
+}
+public function lunaskan($id)
+{
+    $p = Peminjaman::findOrFail($id); // ✅ BENAR
+
+    $p->status_pembayaran = 'lunas';
+    $p->save();
+
+    return back()->with('success', 'Denda berhasil dilunasi');
+}
 }

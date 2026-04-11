@@ -2,120 +2,163 @@
 
 @section('content')
     <style>
-        .container {
-            max-width: 900px;
-            margin: 20px auto;
-            font-family: Arial, sans-serif;
-        }
+       /* CONTAINER */
+.container {
+    max-width: 1050px;
+    margin: 30px auto;
+    font-family: Poppins, sans-serif;
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
 
-        .judul {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+.judul {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+}
 
-        form.filter-form {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            align-items: flex-end;
-        }
+/* FILTER */
+form.filter-form {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
 
-        form.filter-form label {
-            font-weight: bold;
-        }
+form.filter-form select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #f9fafb;
+}
 
-        form.filter-form select {
-            padding: 5px 10px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
+/* BUTTON */
+form.filter-form button {
+    background: #6b3f24;
+    color: white;
+    border-radius: 8px;
+    padding: 8px 14px;
+    border: none;
+}
 
-        form.filter-form button,
-        form.filter-form a {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 4px;
-            text-decoration: none;
-            cursor: pointer;
-        }
+/* 🔥 FIX UNDERLINE CETAK PDF */
+form.filter-form a {
+    background: #ffc107;
+    color: black;
+    border-radius: 8px;
+    padding: 8px 14px;
+    text-decoration: none; /* ⬅️ INI YANG NGILANGIN UNDERLINE */
+    display: inline-block;
+}
 
-        form.filter-form button {
-            background-color: #007bff;
-            color: white;
-        }
+/* TABLE WRAPPER (BIAR LEBIH RAPI) */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    border-radius: 12px;
+    overflow: hidden;
+}
 
-        form.filter-form a {
-            background-color: #ffc107;
-            color: black;
-        }
+/* HEADER */
+table th {
+    background: #6b3f24;
+    color: white;
+    padding: 14px;
+    font-weight: 600;
+    text-align: center;
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 15px;
-        }
+/* DATA */
+table td {
+    padding: 14px 10px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+    vertical-align: middle;
+}
 
-        table th,
-        table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
+/* 🔥 RAPIIIN LEBAR KOLOM */
+table th:nth-child(1),
+table td:nth-child(1) {
+    width: 60px;
+}
 
-        table th {
-            background-color: #f4f4f4;
-        }
+table th:nth-child(2),
+table td:nth-child(2) {
+    width: 20%;
+    text-align: left;
+}
 
-        table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+table th:nth-child(3),
+table td:nth-child(3) {
+    width: 25%;
+    text-align: left;
+}
 
-        .badge {
-            padding: 3px 8px;
-            border-radius: 4px;
-            color: white;
-            font-size: 0.85em;
-        }
+table th:nth-child(4),
+table td:nth-child(4) {
+    width: 150px;
+}
 
-        .badge-warning {
-            background-color: orange;
-        }
+table th:nth-child(5),
+table td:nth-child(5) {
+    width: 120px;
+}
 
-        .badge-success {
-            background-color: green;
-        }
+/* ROW HOVER */
+table tr {
+    transition: 0.2s;
+}
 
-        .badge-secondary {
-            background-color: gray;
-        }
+table tr:hover {
+    background: #f9f6f3;
+}
 
-        .pagination {
-            display: flex;
-            list-style: none;
-            gap: 5px;
-            justify-content: center;
-            padding: 0;
-        }
+/* BADGE */
+.badge {
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+}
 
-        .pagination li {
-            display: inline;
-        }
+.badge-warning {
+    background: #f59e0b;
+}
 
-        .pagination li a,
-        .pagination li span {
-            padding: 5px 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            text-decoration: none;
-            color: black;
-        }
+.badge-success {
+    background: #22c55e;
+}
 
-        .pagination li.active span {
-            background-color: #007bff;
-            color: white;
-            border-color: #007bff;
-        }
+.badge-secondary {
+    background: #6b7280;
+}
+
+/* PAGINATION */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 6px;
+}
+
+.pagination li a,
+.pagination li span {
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    text-decoration: none;
+}
+
+.pagination li.active span {
+    background: #6b3f24;
+    color: white;
+}
     </style>
 
     <div class="container">

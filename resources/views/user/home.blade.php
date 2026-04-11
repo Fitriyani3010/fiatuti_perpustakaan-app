@@ -3,220 +3,256 @@
 @section('title', 'Home — Perpustakaan Digital')
 
 @push('styles')
-    <style>
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
+<style>
+/* CONTAINER */
+.content-box {
+    background: #e5e5e5;
+    padding: 20px;
+    border-radius: 16px;
+}
 
-        .stat-card {
-            background: #fff;
-            border-radius: 14px;
-            padding: 16px 18px;
-            border: 1px solid #EAECF0;
-        }
+/* STAT */
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
 
-        .stat-num {
-            font-size: 26px;
-            font-weight: 700;
-            color: #2563EB;
-        }
+.stat-card {
+    border-radius: 16px;
+    padding: 20px;
+    color: white;
+    transition: 0.3s;
+    cursor: pointer;
+}
 
-        .stat-num.red {
-            color: #EF4444;
-        }
+.stat-card:hover {
+    transform: translateY(-6px);
+}
 
-        .stat-num.green {
-            color: #10B981;
-        }
+/* WARNA */
+.stat-card.green { background: #4CAF50; }
+.stat-card.green:hover { background: linear-gradient(45deg,#4CAF50,#2ecc71); }
 
-        .stat-lbl {
-            font-size: 12px;
-            color: #6B7280;
-        }
+.stat-card.yellow { background: #f4b942; }
+.stat-card.yellow:hover { background: linear-gradient(45deg,#f4b942,#f39c12); }
 
-        .sec-title {
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
+.stat-card.blue { background: #3498db; }
+.stat-card.blue:hover { background: linear-gradient(45deg,#3498db,#5dade2); }
 
-        .pills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
+.stat-card.red { background: #e74c3c; }
+.stat-card.red:hover { background: linear-gradient(45deg,#e74c3c,#ff6b6b); }
 
-        .pill {
-            background: #fff;
-            border: 1px solid #E5E7EB;
-            border-radius: 20px;
-            padding: 6px 16px;
-            font-size: 13px;
-            text-decoration: none;
-            color: #374151;
-        }
+.stat-num {
+    font-size: 24px;
+    font-weight: 700;
+}
 
-        .pill.active,
-        .pill:hover {
-            background: #2563EB;
-            color: white;
-        }
+.stat-lbl {
+    font-size: 13px;
+    margin-top: 5px;
+}
 
-        .buku-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 14px;
-        }
+/* SECTION */
+.sec-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #000;
+}
 
-        .buku-card {
-            background: #fff;
-            border-radius: 14px;
-            overflow: hidden;
-            border: 1px solid #EAECF0;
-            text-decoration: none;
-            transition: 0.2s;
-        }
+/* GRID BUKU */
+.buku-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 20px;
+}
 
-        .buku-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-        }
+/* CARD BUKU */
+.buku-card {
+    background: #f9fafb;
+    border-radius: 16px;
+    padding: 12px;
+    text-align: center;
+    transition: 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+     text-decoration: none; /* 🔥 HILANGIN GARIS */
+    color: inherit;
+}
 
-        .buku-cover {
-            height: 120px;
-            background: #1E3A5F;
-        }
+.buku-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+         text-decoration: none; /* 🔥 HILANGIN GARIS */
+}
 
-        .buku-cover img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+/* COVER */
+.buku-cover {
+    height: 140px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
 
-        .buku-info {
-            padding: 10px;
-        }
+.buku-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 
-        .buku-judul {
-            font-size: 13px;
-            font-weight: 600;
-        }
+/* INFO */
+.buku-judul {
+    font-size: 14px;
+    font-weight: 600;
+      margin-top: 5px;
+}
 
-        .buku-penulis {
-            font-size: 11px;
-            color: #9CA3AF;
-        }
+.buku-penulis {
+    font-size: 12px;
+    color: #777;
+margin-bottom: 6px;
+}
 
-        /* 🔥 PAGINATION */
-        .pagination-wrapper {
-            display: flex;
-            justify-content: center;
-            margin-top: 25px;
-        }
+/* PAGINATION */
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+}
 
-        .pagination {
-            display: flex;
-            gap: 8px;
-        }
+.pagination {
+    display: flex;
+    gap: 8px;
+}
 
-        .pagination li {
-            list-style: none;
-        }
+.pagination li {
+    list-style: none;
+}
 
-        .pagination a,
-        .pagination span {
-            min-width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-            border: 1px solid #e5e7eb;
-            background: #fff;
-            color: #374151;
-            text-decoration: none;
-            font-size: 13px;
-            transition: 0.2s;
-        }
+.pagination a,
+.pagination span {
+    min-width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    color: #374151;
+    text-decoration: none;
+    font-size: 13px;
+}
 
-        .pagination a:hover {
-            background: #2563EB;
-            color: white;
-        }
+.pagination a:hover {
+    background: #6b3f24;
+    color: white;
+}
 
-        .pagination .active span {
-            background: #2563EB;
-            color: white;
-        }
-
-        .pagination .disabled span {
-            opacity: 0.5;
-        }
-    </style>
+.pagination .active span {
+    background: #6b3f24;
+    color: white;
+}
+</style>
 @endpush
 
 @section('content')
+
+<div style="
+    background: #6b3f24;
+    color: white;
+    padding: 25px 20px; /* tadinya 15px jadi lebih tinggi */
+    border-radius: 16px;
+    margin-bottom: 20px;
+">
+    <div style="font-size:16px; font-weight:600;">
+        👋 Selamat datang, {{ auth()->user()->name }}
+    </div>
+    <div style="font-size:13px; opacity:0.9; margin-top:3px;">
+        Selamat membaca dan temukan buku favoritmu hari ini 📚
+    </div>
+</div>
+
+<div class="content-box">
+
     {{-- STAT --}}
     <div class="stat-grid">
-        <div class="stat-card">
-            <div class="stat-num">{{ $bukuDipinjam }}</div>
-            <div class="stat-lbl">Buku Dipinjam</div>
+
+        <div class="stat-card green">
+            <div class="stat-num">📚 {{ $totalBuku }}</div>
+            <div class="stat-lbl">Buku</div>
         </div>
-        <div class="stat-card">
-            <div class="stat-num green">{{ $totalPeminjaman }}</div>
-            <div class="stat-lbl">Total Peminjaman</div>
+
+        <div class="stat-card yellow">
+            <div class="stat-num">📖 {{ $totalPeminjaman }}</div>
+            <div class="stat-lbl">Dipinjam</div>
         </div>
-        <div class="stat-card">
-            <div class="stat-num red">
-                {{ $dendaAktif > 0 ? 'Rp ' . number_format($dendaAktif, 0, ',', '.') : 0 }}
-            </div>
-            <div class="stat-lbl">Denda Aktif</div>
+
+        <div class="stat-card blue">
+            <div class="stat-num">📦 {{ $totalPeminjaman }}</div>
+            <div class="stat-lbl">Dikembalikan</div>
         </div>
+
+        <div class="stat-card red">
+            <div class="stat-num">⚠️ {{ $dendaAktif }}</div>
+            <div class="stat-lbl">Denda</div>
+        </div>
+
     </div>
-    {{-- KATEGORI --}}
-    <div class="sec-title">Kategori</div>
-    <div class="pills">
-        <a href="{{ route('user.home') }}" class="pill {{ !request('kategori') ? 'active' : '' }}">
-            Semua
-        </a>
-        @foreach ($kategoris as $kat)
-            <a href="{{ route('user.home', ['kategori' => $kat->id]) }}"
-                class="pill {{ request('kategori') == $kat->id ? 'active' : '' }}">
-                {{ $kat->nama }}
-            </a>
-        @endforeach
-    </div>
+
     {{-- BUKU --}}
-    <div class="sec-title">Buku Populer</div>
+    <div class="sec-title">📚 Buku Terbaru</div>
+
     <div class="buku-grid">
         @forelse ($bukuPopuler as $buku)
-            <a href="{{ route('user.buku.detail', $buku->id) }}" class="buku-card">
-                <div class="buku-cover">
-                    @if ($buku->cover)
-                        <img src="{{ asset('storage/' . $buku->cover) }}">
-                    @else
-                        <div style="color:white;text-align:center;padding-top:40px;font-size:12px;">
-                            No Cover
-                        </div>
-                    @endif
-                </div>
-                <div class="buku-info">
-                    <div class="buku-judul">{{ $buku->judul }}</div>
-                    <div class="buku-penulis">{{ $buku->penulis }}</div>
-                </div>
-            </a>
+           <div class="buku-card" onclick="window.location='{{ route('user.buku.detail', $buku->id) }}'">
+
+    <div class="buku-cover">
+        @if ($buku->cover)
+            <img src="{{ asset('storage/' . $buku->cover) }}">
+        @else
+            <div style="padding-top:40px; font-size:12px;">
+                No Cover
+            </div>
+        @endif
+    </div>
+
+    <div class="buku-judul">{{ $buku->judul }}</div>
+    <div class="buku-penulis">{{ $buku->penulis }}</div>
+
+    {{-- BUTTON PINJAM --}}
+    <a href="{{ route('user.buku.detail', $buku->id) }}"
+       onclick="event.stopPropagation()"
+       style="
+            display:inline-block;
+            margin-top:10px;
+            padding:6px 12px;
+            background:#22c55e;
+            color:white;
+            font-size:12px;
+            border-radius:8px;
+            text-decoration:none;
+            font-weight:600;
+       "
+       onmouseover="this.style.background='#16a34a'"
+       onmouseout="this.style.background='#22c55e'">
+        📥 Pinjam
+    </a>
+
+</div>
         @empty
             <div style="grid-column:1/-1;text-align:center;color:#9CA3AF;">
                 Tidak ada buku
             </div>
         @endforelse
     </div>
+
     {{-- PAGINATION --}}
     <div class="pagination-wrapper">
         {{ $bukuPopuler->links() }}
     </div>
+
+</div>
+
 @endsection

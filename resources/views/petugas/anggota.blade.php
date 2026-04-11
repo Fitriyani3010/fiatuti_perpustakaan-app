@@ -14,28 +14,73 @@
             gap: 10px;
         }
 
-        .table-box {
-            background: #fff;
-            padding: 20px;
-            border-radius: 16px;
-        }
+       table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+/* HEADER */
+th {
+    background: #6b3f24;
+    color: white;
+    padding: 14px 10px;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+}
 
-        th,
-        td {
-            padding: 12px;
-            border-top: 1px solid #e5e7eb;
-        }
+/* ISI */
+td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    text-align: center;
 
-        .action-group {
-            display: flex;
-            gap: 5px;
-        }
+    /* 🔥 INI KUNCI BIAR RAPI */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
+
+
+/* LEBAR KOLOM FIX */
+th:nth-child(1), td:nth-child(1) { width: 15%; } /* nama */
+th:nth-child(2), td:nth-child(2) { width: 18%; } /* email */
+th:nth-child(3), td:nth-child(3) { width: 12%; } /* nisn */
+th:nth-child(4), td:nth-child(4) { width: 10%; } /* kelas */
+th:nth-child(5), td:nth-child(5) { width: 13%; } /* hp */
+th:nth-child(6), td:nth-child(6) { width: 22%; } /* alamat */
+th:nth-child(7), td:nth-child(7) { width: 10%; } /* aksi */
+
+/* HOVER */
+tr {
+    transition: 0.2s;
+}
+
+tr:hover {
+    background: #f9f6f3;
+}
+
+/* AKSI BUTTON BIAR RAPI */
+.action-group {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
+/* TABLE BOX */
+.table-box {
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+      
         .edit {
             background: #7aabfb;
             color: white;
@@ -87,69 +132,93 @@
             border: 1px solid #e5e7eb;
             border-radius: 8px;
         }
+        
     </style>
 
-    <div class="header">
-        <h1>Kelola Anggota</h1>
+    <div style="margin-bottom:20px;">
+    <h2 style="margin-bottom:10px;">👥 Kelola Anggota</h2>
 
-        <div class="actions">
-            <form method="GET">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search...">
-            </form>
+    <form method="GET" style="display:flex; gap:10px; max-width:400px;">
+        <input type="text"
+               name="search"
+               value="{{ request('search') }}"
+               placeholder="Cari nama / email..."
+               style="
+                   flex:1;
+                   padding:10px 14px;
+                   border-radius:999px;
+                   border:1px solid #ddd;
+                   outline:none;
+               ">
 
-            <button type="button" class="btn" onclick="openModal()">+ Tambah</button>
-        </div>
-    </div>
+        <button type="submit"
+                style="
+                    padding:10px 16px;
+                    border:none;
+                    border-radius:999px;
+                    background:#6b3f24;
+                    color:white;
+                    cursor:pointer;
+                ">
+            Cari
+        </button>
+    </form>
+</div>
 
-    <div class="table-box">
-        <table>
-            <thead>
+   <div class="table-box">
+    <table>
+        <thead>
+            <tr>
+                <th>Nama</th>
+                <th>Email</th>
+                <th>NISN</th>
+                <th>Kelas</th>
+                <th>No HP</th>
+                <th>Alamat</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @forelse ($anggotas as $a)
                 <tr>
-                    <th>Nama</th>
-                    <th>Email</th>
-                    <th>No HP</th>
-                    <th>Alamat</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
+                    <td>{{ $a->name }}</td>
+                    <td>{{ $a->email }}</td>
+                    <td>{{ $a->nisn ?? '-' }}</td>
+                    <td>{{ $a->kelas ?? '-' }}</td>
+                    <td>{{ $a->no_telepon ?? '-' }}</td>
+                    <td>{{ $a->alamat ?? '-' }}</td>
+                    <td>
+                        <div class="action-group">
+                            <button type="button" class="edit" onclick='editData(@json($a))'>
+                                Edit
+                            </button>
 
-            <tbody>
-                @forelse ($anggotas as $a)
-                    <tr>
-                        <td>{{ $a->name }}</td>
-                        <td>{{ $a->email }}</td>
-                        <td>{{ $a->no_telepon }}</td>
-                        <td>{{ $a->alamat }}</td>
-                        <td>
-                            <div class="action-group">
-                                <button type="button" class="edit" onclick='editData(@json($a))'>
-                                    Edit
+                            <form action="{{ route('petugas.anggota.delete', $a->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="hapus">
+                                    Delete
                                 </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="7" style="text-align:center;">Tidak ada data</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
 
-                                <form action="{{ route('petugas.anggota.delete', $a->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="hapus">
-                                        Delete
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" style="text-align:center;">Tidak ada data</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-
-        <div style="margin-top:10px; font-size:13px;">
-            Menampilkan {{ $anggotas->firstItem() ?? 0 }} - {{ $anggotas->lastItem() ?? 0 }}
-            dari {{ $anggotas->total() }} data
-        </div>
+    <div style="margin-top:10px; font-size:13px;">
+        Menampilkan {{ $anggotas->firstItem() ?? 0 }} - {{ $anggotas->lastItem() ?? 0 }}
+        dari {{ $anggotas->total() }} data
     </div>
+</div>
 
+       
     <div style="margin-top:20px;">
         {{ $anggotas->links() }}
     </div>

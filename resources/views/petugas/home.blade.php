@@ -4,105 +4,109 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        .dashboard {
-            display: grid;
-            gap: 20px;
-        }
+     .dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
 
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-        }
+/* CARDS */
+.cards {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
 
-        .card {
-            background: #fff;
-            padding: 20px;
-            border-radius: 14px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-        }
+.card {
+    flex: 1;
+    min-width: 180px;
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+    transition: 0.3s;
+}
 
-        .card h2 {
-            margin-top: 5px;
-        }
+.card:hover {
+    transform: translateY(-5px);
+}
 
-        .card.blue {
-            border-left: 5px solid #3b82f6;
-        }
+/* WARNA SESUAI STYLE LAMA */
+.card.blue { background: #2196F3; }
+.card.green { background: #4CAF50; }
+.card.red { background: #e74c3c; }
+.card.orange { background: #f4c542; color: #333; }
 
-        .card.green {
-            border-left: 5px solid #10b981;
-        }
+/* GRID */
+.grid-2 {
+    display: flex;
+    gap: 20px;
+}
 
-        .card.red {
-            border-left: 5px solid #ef4444;
-        }
+/* SECTION */
+.section {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
 
-        .card.orange {
-            border-left: 5px solid #f59e0b;
-        }
+/* CHART */
+.chart-box {
+    flex: 2;
+}
 
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-        }
+/* AKTIVITAS */
+.activity-box {
+    flex: 1;
+}
 
-        .section {
-            background: #fff;
-            padding: 20px;
-            border-radius: 14px;
-        }
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 10px;
+}
 
-        .quick-actions {
-            display: flex;
-            gap: 10px;
-        }
+th {
+    background: #6b3f24;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
 
-        .btn {
-            background: #2563eb;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 10px;
-            text-decoration: none;
-        }
+td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
 
-        .alert {
-            background: #fee2e2;
-            color: #991b1b;
-            padding: 10px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
+tr {
+    background: #fafafa;
+    transition: 0.2s;
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+tr:hover {
+    background: #f1f1f1;
+}
 
-        td,
-        th {
-            padding: 10px;
-        }
+/* BADGE */
+.badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: white;
+}
 
-        .badge {
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            color: white;
-        }
+.waiting { background: orange; }
+.borrowed { background: #3b82f6; }
+.done { background: #10b981; }
 
-        .waiting {
-            background: orange;
-        }
-
-        .borrowed {
-            background: #3b82f6;
-        }
-
-        .done {
-            background: #10b981;
-        }
+/* ACTIVITY ITEM */
+.activity-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
     </style>
     <div class="dashboard">
         {{-- HEADER --}}
@@ -132,53 +136,32 @@
                 <p>Menunggu</p>
                 <h2>{{ $menunggu }}</h2>
             </div>
-        </div>
-        {{-- GRID --}}
-        <div class="grid-2">
-            {{-- CHART --}}
-            <div class="section">
-                <h3>Grafik Peminjaman (7 Hari)</h3>
-                <canvas id="chart"></canvas>
-            </div>
-            {{-- ALERT --}}
-            <div class="section">
-                <h3>Notifikasi</h3>
-                @if ($terlambat > 0)
-                    <div class="alert">
-                        ⚠️ Ada {{ $terlambat }} buku terlambat!
-                    </div>
-                @else
-                    <p>Tidak ada keterlambatan 🎉</p>
-                @endif
-                <div class="quick-actions">
-                    <a href="{{ route('petugas.peminjaman') }}" class="btn">Cek Peminjaman</a>
-                </div>
-            </div>
 
-        </div>
-        {{-- ACTIVITY --}}
-        <div class="section">
-            <h3>Aktivitas Terbaru</h3>
-
-            <table>
-                @foreach ($recentPeminjaman as $item)
-                    <tr>
-                        <td>{{ $item->user->name }}</td>
-                        <td>{{ $item->buku->judul }}</td>
-                        <td>
-                            @if ($item->status == 'menunggu')
-                                <span class="badge waiting">Menunggu</span>
-                            @elseif($item->status == 'dipinjam')
-                                <span class="badge borrowed">Dipinjam</span>
-                            @else
-                                <span class="badge done">Selesai</span>
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
-            </table>
-        </div>
+    {{-- CHART --}}
+    <div class="section chart-box">
+        <h3>Grafik Peminjaman (7 Hari)</h3>
+        <canvas id="chart"></canvas>
     </div>
+
+    {{-- AKTIVITAS --}}
+    <div class="section activity-box">
+        <h3>Aktivitas</h3>
+
+        @foreach ($recentPeminjaman as $item)
+            <div class="activity-item">
+                <b>{{ $item->user->name }}</b><br>
+                meminjam <b>{{ $item->buku->judul }}</b>
+
+                <br>
+                <small style="color:gray;">
+                    {{ $item->created_at->diffForHumans() }}
+                </small>
+            </div>
+        @endforeach
+
+    </div>
+
+</div>
     <script>
         // chart
         const ctx = document.getElementById('chart');

@@ -1,150 +1,206 @@
 @extends('kepala.layouts.app')
 @section('content')
-    <style>
-        .page-title {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
 
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 25px;
-        }
+<style>
+/* WELCOME */
+.welcome-box {
+    background: linear-gradient(135deg,#6b3f24,#a47148);
+    color: white;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
 
-        .card {
-            background: #fff;
-            padding: 18px;
-            border-radius: 14px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-        }
+/* CARD STAT */
+.stat-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
 
-        .card p {
-            font-size: 13px;
-            color: #6b7280;
-        }
+.card-stat {
+    flex: 1;
+    min-width: 200px;
+    padding: 20px;
+    border-radius: 14px;
+    color: white;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    transition: 0.3s;
+    cursor: pointer;
+}
 
-        .card h2 {
-            margin-top: 5px;
-            font-size: 22px;
-        }
+.card-stat:hover {
+    transform: translateY(-8px) scale(1.03);
+}
 
-        .table-box {
-            background: #fff;
-            padding: 20px;
-            border-radius: 14px;
-            margin-bottom: 20px;
-        }
+/* GRID */
+.grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 25px;
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+.box {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
 
-        th,
-        td {
-            padding: 12px;
-            font-size: 14px;
-        }
+/* chart & aktivitas */
+.chart-box {
+    flex: 2;
+    min-width: 400px;
+}
 
-        th {
-            text-align: left;
-            color: #6b7280;
-            border-bottom: 1px solid #eee;
-        }
+.activity-box {
+    flex: 1;
+    min-width: 280px;
+}
 
-        .badge {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            color: white;
-        }
+.activity-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+</style>
 
-        .green {
-            background: #10b981;
-        }
+<!-- WELCOME -->
+<div class="welcome-box">
+    <h2>
+        Halo, {{ session('user')->username ?? 'Admin' }} 👋
+    </h2>
+    <p style="margin-top:5px; opacity:0.9;">
+        Selamat datang di dashboard kepala perpustakaan
+    </p>
+</div>
 
-        .yellow {
-            background: #f59e0b;
-        }
+<!-- CARD -->
+<div class="stat-container">
 
-        .red {
-            background: #ef4444;
-        }
-    </style>
-    {{-- cards --}}
-    <div class="cards">
-        <div class="card">
-            <p>Total Buku</p>
-            <h2>{{ number_format($totalBuku) }}</h2>
-        </div>
-        <div class="card">
-            <p>Total Anggota</p>
-            <h2>{{ number_format($totalAnggota) }}</h2>
-        </div>
-        <div class="card">
-            <p>Total Peminjaman</p>
-            <h2>{{ number_format($totalPeminjaman) }}</h2>
-        </div>
-        <div class="card">
-            <p>Total Denda</p>
-            <h2>Rp {{ number_format($totalDenda, 0, ',', '.') }}</h2>
-        </div>
+    <div class="card-stat" style="background:linear-gradient(135deg,#43a047,#66bb6a);">
+        <h2>📚 {{ $totalBuku }}</h2>
+        <p>Total Buku</p>
     </div>
-    {{-- petugas --}}
-    <div class="table-box">
-        <h4 style="margin-bottom:10px;">Data Petugas</h4>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nama</th>
-                    <th>Email</th>
-                    <th>Status</th>
-                    <th>Aktivitas</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($petugas as $p)
-                    <tr>
-                        <td>{{ $p->name }}</td>
-                        <td>{{ $p->email }}</td>
-                        <td>
-                            <span class="badge green">Aktif</span>
-                        </td>
-                        <td>-</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+
+    <div class="card-stat" style="background:linear-gradient(135deg,#1e88e5,#42a5f5);">
+        <h2>👥 {{ $totalAnggota }}</h2>
+        <p>Total Anggota</p>
     </div>
-    {{-- buku --}}
-    <div class="table-box">
-        <h4 style="margin-bottom:10px;">Buku Populer</h4>
-        <table>
-            <thead>
-                <tr>
-                    <th>Judul Buku</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($bukuPopuler as $buku)
-                    <tr>
-                        <td>{{ $buku->judul }}</td>
-                        <td>
-                            @if ($buku->stok > 5)
-                                <span class="badge green">Tersedia</span>
-                            @elseif($buku->stok > 0)
-                                <span class="badge yellow">Terbatas</span>
-                            @else
-                                <span class="badge red">Habis</span>
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+
+    <div class="card-stat" style="background:linear-gradient(135deg,#f4b400,#ffd54f);">
+        <h2>📖 {{ $totalPeminjaman }}</h2>
+        <p>Total Peminjaman</p>
     </div>
+
+    <div class="card-stat" style="background:linear-gradient(135deg,#e53935,#ef5350);">
+        <h2>💰 Rp {{ number_format($totalDenda,0,',','.') }}</h2>
+        <p>Total Denda</p>
+    </div>
+
+</div>
+
+<!-- GRID -->
+<div class="grid">
+
+    <!-- STATISTIK -->
+    <div class="box chart-box">
+
+        <!-- STATISTIK -->
+<div class="box chart-box">
+
+    <h3>📊 Statistik Peminjaman (7 Hari Terakhir)</h3>
+
+    <canvas id="chart" height="120" style="margin-top:20px;"></canvas>
+
+</div>
+        <canvas id="chart" height="120" style="margin-top:20px;"></canvas>
+
+    </div>
+
+    <!-- AKTIVITAS -->
+    <div class="box activity-box">
+
+        <h3>⚡ Aktivitas Terbaru</h3>
+
+        <div style="margin-top:15px;">
+
+            @foreach($aktivitas as $a)
+            <div class="activity-item">
+
+                <b>{{ $a->user->name ?? '-' }}</b><br>
+meminjam <b>{{ $a->buku->judul ?? '-' }}</b>
+
+                <br>
+
+                <small style="color:gray;">
+                    {{ $a->created_at ? \Carbon\Carbon::parse($a->created_at)->diffForHumans() : '-' }}
+                </small>
+
+            </div>
+            @endforeach
+
+        </div>
+
+    </div>
+
+</div>
+
+<canvas id="chart"></canvas>
+
+<!-- INI WAJIB DI ATAS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const ctx = document.getElementById('chart');
+
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: @json($labels),
+        datasets: [{
+            label: 'Peminjaman',
+            data: @json($chartData),
+            borderWidth: 2,
+            tension: 0.3
+        }]
+    }
+});
+</script>
+<script>
+let chart;
+
+
+
+function renderChart(labels, pinjam, kembali){
+
+    if(chart) chart.destroy();
+
+    chart = new Chart(document.getElementById('chart'), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Peminjaman',
+                    data: pinjam,
+                    borderWidth: 3,
+                    tension: 0.4
+                },
+                {
+                    label: 'Pengembalian',
+                    data: kembali,
+                    borderWidth: 3,
+                    tension: 0.4
+                }
+            ]
+        }
+    });
+}
+
+loadMingguan();
+</script>
+
 @endsection
