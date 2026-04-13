@@ -43,7 +43,7 @@
 table {
     width: 100%;
     border-collapse: collapse;
-    font-family: 'Georgia', serif;
+   
 }
 
 /* HEADER TABLE */
@@ -99,7 +99,7 @@ tr:hover {
     border: none;
     font-size: 12px;
     cursor: pointer;
-    font-family: 'Georgia', serif;
+   
     transition: 0.3s;
 }
 
@@ -196,7 +196,7 @@ td[colspan] {
         <a href="{{ url()->current() }}"
             style="
                 padding:10px 18px;
-                background:#ef4444;
+                background:#a94438;
                 color:white;
                 border-radius:10px;
                 text-decoration:none;
@@ -213,6 +213,7 @@ td[colspan] {
         <thead>
             <tr>
                 <th>Nama</th>
+                <th>Kelas</th> {{-- TAMBAHAN --}}
                 <th>Buku</th>
                 <th>Jumlah</th> {{-- TAMBAHAN --}}
                 <th>Tgl Pinjam</th>
@@ -233,6 +234,7 @@ td[colspan] {
 
                 <tr>
                     <td>{{ $item->user->name }}</td>
+                    <td>{{ $item->user->kelas ?? '-' }}</td> {{-- TAMBAHAN --}}
                     <td>{{ $item->buku->judul }}</td>
                     <td>{{ $item->jumlah ?? 1 }}</td> {{-- AMAN (kalau ga ada tetap 1) --}}
                     <td>

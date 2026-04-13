@@ -21,7 +21,22 @@ class KepalaDashboardController extends Controller
         $totalBuku = Buku::count();
         $totalAnggota = User::where('role', 'user')->count();
         $totalPeminjaman = Peminjaman::count();
-        $totalDenda = Peminjaman::sum('denda');
+        $totalDenda = 0;
+
+$dataDenda = Peminjaman::where('status', 'dikembalikan')
+    ->whereNotNull('tanggal_kembali')
+    ->get();
+
+foreach ($dataDenda as $item) {
+
+    $batas = \Carbon\Carbon::parse($item->tanggal_kembali)->startOfDay();
+  $kembali = Carbon::parse($item->updated_at)->startOfDay();
+
+    if ($kembali->gt($batas)) {
+        $terlambat = $batas->diffInDays($kembali);
+        $totalDenda += (int) $item->denda; // 🔥 PAKAI DATABASE
+    }
+}
 
         $petugas = User::where('role', 'petugas')->latest()->take(5)->get();
         $bukuPopuler = Buku::latest()->take(5)->get();
@@ -148,6 +163,26 @@ class KepalaDashboardController extends Controller
 
         $data = $query->paginate(10);
 
+        foreach ($data as $d) {
+
+    $terlambat = 0;
+
+    if ($d->tanggal_kembali && $d->tanggal_dikembalikan) {
+
+        $batas = Carbon::parse($d->tanggal_kembali)->startOfDay();
+        $kembali = Carbon::parse($d->tanggal_dikembalikan)->startOfDay();
+
+        if ($kembali->gt($batas)) {
+            $terlambat = $batas->diffInDays($kembali);
+        }
+    }
+
+    $d->terlambat = $terlambat;
+
+    // 🔥 INI YANG HARUS DIPAKAI (BUKAN $d->denda)
+    $d->denda_real = $terlambat * 5000 * ($d->jumlah ?? 1);
+}
+
         return view('kepala.laporan.peminjaman', compact('data', 'bulan', 'tahun'));
     }
 
@@ -166,15 +201,35 @@ class KepalaDashboardController extends Controller
         return $pdf->stream('laporan-peminjaman-'.$bulan.'-'.$tahun.'.pdf');
     }
     //laporan denda
-    public function laporanDenda()
-    {
-        $data = Peminjaman::with(['user','buku'])
-            ->where('denda','>',0)
-            ->latest()
-            ->paginate(10);
+public function laporanDenda()
+{
+    $data = Peminjaman::with(['user','buku'])
+        ->where('status', 'dikembalikan')
+        ->latest()
+        ->paginate(10);
 
-        return view('kepala.laporan.denda', compact('data'));
+    foreach ($data as $d) {
+
+        $terlambat = 0;
+
+        if ($d->tanggal_kembali && $d->tanggal_dikembalikan) {
+
+            $batas = Carbon::parse($d->tanggal_kembali)->startOfDay();
+            $kembali = Carbon::parse($d->tanggal_dikembalikan)->startOfDay();
+
+            if ($kembali->gt($batas)) {
+                $terlambat = $batas->diffInDays($kembali);
+            }
+        }
+
+        $d->terlambat = $terlambat;
+
+        // 🔥 REAL DATA DARI DATABASE
+       $d->denda_real = $terlambat * 5000 * ($d->jumlah ?? 1);
     }
+
+    return view('kepala.laporan.denda', compact('data'));
+}
 
     //laporan anggota
     public function laporanAnggota(Request $request)

@@ -59,48 +59,78 @@
     margin-bottom: 15px;
 }
 
-/* CARD TABLE */
+/* CARD TABLE (kertas tua) */
 .table-box {
-    background: white;
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-    overflow-x: auto;
+    background: #fdf8f3;
+    padding: 22px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(75, 46, 30, 0.15);
+    border: 1px solid #e6d5c3;
 }
 
 /* TABLE */
 table {
     width: 100%;
     border-collapse: collapse;
-    text-align: center;
+   
     font-size: 14px;
 }
 
-/* HEADER TABLE */
+/* HEADER */
 th {
-    background: #d6c2b5;
-    color: #333;
-    padding: 12px;
+    background: linear-gradient(135deg, #6b3f24, #8b5e3c);
+    color: #fff8f0;
+    padding: 14px;
     font-weight: 600;
+    letter-spacing: 0.5px;
+    text-align: center;
+    border-bottom: 2px solid #d6c2b5;
 }
 
-/* ISI TABLE */
+/* DATA */
 td {
-    padding: 12px;
-    border-bottom: 1px solid #eee;
+    padding: 14px;
+    color: #4b2e1e;
+    border-bottom: 1px dashed #e0cfc2;
+}
+
+/* STRIPED ROW */
+tbody tr:nth-child(even) {
+    background: #f7efe8;
 }
 
 /* HOVER */
 tbody tr:hover {
-    background: #f9f6f3;
+    background: #f1e4d8;
+    transition: 0.3s;
 }
 
-/* COVER */
+/* COVER IMAGE (biar lebih vintage) */
 td img {
     width: 45px;
     height: 60px;
     object-fit: cover;
-    border-radius: 6px;
+    border-radius: 8px;
+    box-shadow: 0 3px 8px rgba(75,46,30,0.2);
+}
+
+/* ACTION BUTTON */
+.edit {
+    background: #4a6fa5; /* biru vintage */
+}
+
+.hapus {
+    background: #a94438; /* merah bata */
+}
+
+/* SEARCH & BUTTON BIAR MATCH */
+.actions input {
+    border: 1px solid #d6c2b5;
+    background: #fffaf5;
+}
+
+.btn {
+    background: #6b8e23; /* olive */
 }
 
 /* AKSI */
@@ -110,22 +140,21 @@ td img {
     gap: 6px;
 }
 
-/* BUTTON AKSI */
 .edit {
-    background: #3498db;
+    background: #4a6fa5;
     color: white;
     border: none;
-    padding: 6px 10px;
-    border-radius: 6px;
+    padding: 6px 12px; /* ⬅️ lebih lebar */
+    border-radius: 8px;
     cursor: pointer;
 }
 
 .hapus {
-    background: #e74c3c;
+    background: #a94438;
     color: white;
     border: none;
-    padding: 6px 10px;
-    border-radius: 6px;
+    padding: 6px 12px; /* ⬅️ samain */
+    border-radius: 8px;
     cursor: pointer;
 }
 
@@ -175,33 +204,104 @@ td img {
     opacity: 0.4;
 }
 
-/* MODAL */
+/* OVERLAY */
 .modal {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.5);
+    background: rgba(75, 46, 30, 0.6); /* coklat gelap */
+    backdrop-filter: blur(3px);
     justify-content: center;
     align-items: center;
+    z-index: 999;
 }
 
+/* BOX MODAL (kertas tua) */
 .modal form {
-    background: white;
+    background: #fdf8f3;
     padding: 25px;
-    border-radius: 15px;
+    border-radius: 20px;
     width: 420px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    animation: fadeIn 0.3s;
+    gap: 12px;
+    border: 1px solid #e6d5c3;
+    box-shadow: 0 15px 35px rgba(75, 46, 30, 0.3);
+    animation: fadeIn 0.3s ease;
 }
 
+/* TITLE */
+.modal h3 {
+    font-family: 'Playfair Display', serif;
+    color: #4b2e1e;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+/* INPUT */
 .modal input,
 .modal select,
 .modal textarea {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #d6c2b5;
+    background: #fffaf5;
+    color: #4b2e1e;
+    outline: none;
+    transition: 0.2s;
+}
+
+/* FOCUS */
+.modal input:focus,
+.modal select:focus,
+.modal textarea:focus {
+    border-color: #6b3f24;
+    box-shadow: 0 0 0 2px rgba(107,63,36,0.15);
+}
+
+/* TEXTAREA */
+.modal textarea {
+    resize: none;
+    min-height: 80px;
+}
+
+/* BUTTON GROUP */
+.modal form div {
+    margin-top: 10px;
+}
+
+/* BUTTON */
+.modal .btn {
+    background: #6b8e23; /* olive */
+    color: white;
+}
+
+.modal button[type="button"] {
+    background: #a94438; /* merah bata */
+    color: white;
+    border: none;
+    border-radius: 10px;
     padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
+    cursor: pointer;
+}
+
+/* HOVER BUTTON */
+.modal .btn:hover,
+.modal button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(75,46,30,0.2);
+}
+
+/* ANIMASI */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 .page-header {
     display: flex;
@@ -244,12 +344,11 @@ td img {
                 @forelse ($bukus as $b)
                     <tr>
                         <td>
-                            @if ($b->cover)
-                                <img src="{{ asset('storage/' . $b->cover) }}"
-                                    style="width:40px;height:55px;border-radius:6px;object-fit:cover;">
-                            @else
-                                -
-                            @endif
+                           @if($b->cover)
+    <img src="{{ asset('storage/' . $b->cover) }}" width="40">
+@else
+    <span>-</span>
+@endif
                         </td>
 
                         <td>{{ $b->judul }}</td>
@@ -267,7 +366,7 @@ td img {
                                     @csrf
                                     @method('DELETE')
                                     <button class="hapus" onclick="return confirm('Hapus buku ini?')">
-                                        Delete
+                                        Hapus
                                     </button>
                                 </form>
                             </div>

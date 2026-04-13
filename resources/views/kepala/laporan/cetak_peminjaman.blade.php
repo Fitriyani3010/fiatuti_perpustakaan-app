@@ -39,8 +39,10 @@
             <tr>
                 <th>No</th>
                 <th>Nama</th>
+                <th>Kelas</th>
                 <th>Buku</th>
                 <th>Tanggal Pinjam</th>
+                 <th>Denda</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -49,13 +51,17 @@
                 <tr>
                     <td>{{ $i + 1 }}</td>
                     <td>{{ $d->user->name }}</td>
+                    <td>{{ $d->user->kelas ?? '-' }}</td>
                     <td>{{ $d->buku->judul }}</td>
                     <td>{{ \Carbon\Carbon::parse($d->tanggal_pinjam)->format('d-m-Y') }}</td>
+                                          <td>
+    Rp {{ number_format($d->denda ?? 0, 0, ',', '.') }}
+</td>
                     <td>{{ ucfirst($d->status) }}</td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5" style="text-align:center;">Tidak ada data</td>
+                    <td colspan="6" style="text-align:center;">Tidak ada data</td>
                 </tr>
             @endforelse
         </tbody>

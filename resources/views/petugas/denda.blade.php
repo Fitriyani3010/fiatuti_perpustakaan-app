@@ -30,51 +30,61 @@
     margin-top: 5px;
 }
 
-/* TABLE BOX */
+/* TABLE BOX (kertas tua) */
 .table-box {
-    background: #fff;
-    padding: 20px;
-    border-radius: 18px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    background: #fdf8f3;
+    padding: 22px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(75, 46, 30, 0.15);
+    border: 1px solid #e6d5c3;
 }
 
 /* TABLE */
 table {
     width: 100%;
     border-collapse: collapse;
+   
 }
 
+/* HEADER TABLE */
 th {
     text-align: left;
-    padding: 14px;
-    background: #f3eae5;
-    color: #6b3f24;
+    padding: 16px;
+    background: linear-gradient(135deg, #6b3f24, #8b5e3c);
+    color: #fff8f0;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #d6c2b5;
 }
 
+/* DATA */
 td {
-    padding: 14px;
+    padding: 14px 16px;
     font-size: 14px;
-    border-bottom: 1px solid #f1f1f1;
+    color: #4b2e1e;
+    border-bottom: 1px dashed #e0cfc2;
 }
 
+/* STRIPED ROW */
+tr:nth-child(even) {
+    background: #f7efe8;
+}
+
+/* HOVER */
 tr:hover {
-    background: #faf6f3;
-    transition: 0.2s;
+    background: #f1e4d8;
+    transition: 0.3s;
 }
 
-/* BADGE */
-.badge {
-    padding: 5px 12px;
-    border-radius: 999px;
-    font-size: 12px;
-    color: #fff;
-}
+.btn.green { background: #6b8e23; color: white; }
+.btn.red { background: #a94438; color: white; }
+.btn.blue { background: #4a6fa5; color: white; }
 
-.orange { background: #f59e0b; }
-.green { background: #10b981; }
-.red { background: #ef4444; }
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(75, 46, 30, 0.25);
+}
 
 /* BUTTON */
 .btn {
@@ -135,21 +145,65 @@ tr:hover {
     justify-content: center;
     margin-top: 25px;
 }
+.denda-wrapper {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.card {
+    flex: 1;
+    min-width: 250px;
+    padding: 25px;
+    border-radius: 18px;
+    color: white;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.card h3 {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.card h1 {
+    font-size: 30px;
+    margin-top: 5px;
+}
+
+/* WARNA */
+.merah {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.hijau {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
     </style>
 
     <h4 class="page-title">Kelola Denda</h4>
 
-    <div class="denda-card">
-        <h3>Total Denda Aktif</h3>
-        <h1>Rp {{ number_format($totalDenda, 0, ',', '.') }}</h1>
+   <div class="denda-wrapper">
+
+    <div class="card merah">
+        <h3>Denda Belum Dibayar</h3>
+        <h1>Rp {{ number_format($totalDendaAktif, 0, ',', '.') }}</h1>
     </div>
 
+    <div class="card hijau">
+        <h3>Denda Sudah Dibayar</h3>
+        <h1>Rp {{ number_format($totalDendaLunas, 0, ',', '.') }}</h1>
+    </div>
+
+</div>
     <div class="table-box">
         <table width="100%">
             <thead>
                 <tr>
+                    
                     <th>Nama</th>
                     <th>Buku</th>
+                    <th>Jumlah Pinjam</th>
                     <th>Terlambat</th>
                     <th>Total</th>
                    
@@ -163,9 +217,16 @@ tr:hover {
                     <tr>
                         <td>{{ $item->user->name }}</td>
                         <td>{{ $item->buku->judul }}</td>
+                      <td>
+    {{ $item->jumlah ?? 1 }}
+</td>
                         <td>{{ $item->terlambat }} Hari</td>
-                        <td>Rp {{ number_format($item->total_denda, 0, ',', '.') }}</td>
-
+<td>
+  Rp {{ number_format((int)$item->total_denda, 0, ',', '.') }}
+    @if ($item->total_denda > 0 && $item->status_pembayaran == 'lunas')
+        <br><small style="color:#10b981;">✔ Sudah dibayar</small>
+    @endif
+</td>
                         
                      
 
@@ -180,9 +241,9 @@ tr:hover {
                             @endif
                         </td>
 
-                        {{-- AKSI --}}
-                       <td>
-    @if ($item->status_pembayaran != 'lunas')
+                      {{-- AKSI --}}
+<td>
+    @if ($item->status == 'dikembalikan' && $item->total_denda > 0 && $item->status_pembayaran != 'lunas')
         <form action="{{ route('petugas.lunaskan', $item->id) }}" method="POST">
             @csrf
             <button class="btn green"
@@ -190,8 +251,12 @@ tr:hover {
                 Bayar (Offline)
             </button>
         </form>
-    @else
+
+    @elseif ($item->status_pembayaran == 'lunas' && $item->total_denda > 0)
         <span style="color:#10b981;">✔ Lunas</span>
+
+    @else
+        <span style="color:#94a3b8;">-</span>
     @endif
 </td>
 

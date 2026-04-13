@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models;
+use Carbon\Carbon;
+
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,5 +33,22 @@ class Peminjaman extends Model
     public function buku()
 {
      return $this->belongsTo(Buku::class, 'buku_id', 'id');
+}
+
+public function getTerlambatAttribute()
+{
+    if (!$this->tanggal_kembali) return 0;
+
+    $batas = Carbon::parse($this->tanggal_kembali)->startOfDay();
+    $today = now()->startOfDay();
+
+    return $today->gt($batas)
+        ? $batas->diffInDays($today)
+        : 0;
+}
+
+public function getDendaOtomatisAttribute()
+{
+    return $this->terlambat * 5000 * $this->jumlah;
 }
 }

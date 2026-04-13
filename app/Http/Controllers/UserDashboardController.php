@@ -23,9 +23,30 @@ class UserDashboardController extends Controller
             ->sum('jumlah');
 
         $totalPeminjaman = Peminjaman::where('user_id', $user->id)->count();
-        $dendaAktif = Peminjaman::where('user_id', $user->id)
-            ->where('status_pembayaran', '!=', 'lunas')
-            ->sum('denda');
+       $dendaAktif = Peminjaman::where('user_id', $user->id)
+    ->where('status_pembayaran', '!=', 'lunas')
+    ->get()
+    ->sum(function ($item) {
+        return $item->denda_otomatis;
+    });
+    $dataDenda = Peminjaman::where('user_id', $user->id)
+    ->where('status', 'dipinjam')
+    ->get();
+
+foreach ($dataDenda as $item) {
+
+    if ($item->tanggal_kembali) {
+        $batas = \Carbon\Carbon::parse($item->tanggal_kembali)->startOfDay();
+        $today = now()->startOfDay();
+
+        if ($today->greaterThan($batas)) {
+            $terlambat = $batas->diffInDays($today);
+            $denda = $terlambat * 5000 * $item->jumlah;
+
+            $dendaAktif += $denda;
+        }
+    }
+}
 
         $kategoris = Kategori::all();
 
@@ -172,23 +193,33 @@ class UserDashboardController extends Controller
 
     //riwayat
     public function riwayat(Request $request)
-    {
-        $query = Peminjaman::with('buku')
-            ->where('user_id', Auth::id());
+{
+    $query = Peminjaman::with('buku')
+        ->where('user_id', Auth::id());
 
-        if ($request->search) {
-            $query->whereHas('buku', function ($q) use ($request) {
-                $q->where('judul', 'like', '%' . $request->search . '%');
-            });
-        }
-
-        $riwayats = $query->latest()
-            ->paginate(5)
-            ->withQueryString();
-
-        return view('user.riwayat', compact('riwayats'));
+    if ($request->search) {
+        $query->whereHas('buku', function ($q) use ($request) {
+            $q->where('judul', 'like', '%' . $request->search . '%');
+        });
     }
 
+    $riwayats = $query->latest()
+        ->paginate(5)
+        ->withQueryString();
+
+    // 🔥 TAMBAH INI
+    foreach ($riwayats as $item) {
+
+    $item->terlambat = $item->terlambat;
+    $item->total_denda = $item->denda_otomatis;
+
+    if ($item->status_pembayaran == 'lunas') {
+        $item->total_denda = 0;
+    }
+}
+
+    return view('user.riwayat', compact('riwayats'));
+}
     //denda
     public function denda()
     {
@@ -198,26 +229,17 @@ class UserDashboardController extends Controller
             ->latest()
             ->paginate(5);
 
-        $totalDenda = 0;
+       $totalDenda = 0;
 
-        foreach ($denda as $item) {
+foreach ($denda as $item) {
 
-            $batas = Carbon::parse($item->tanggal_kembali);
-            $terlambat = 0;
-            $dendaFix = $item->denda;
+    $item->terlambat = $item->terlambat;
+    $item->total_denda = $item->status_pembayaran == 'lunas'
+        ? 0
+        : $item->denda_otomatis;
 
-            if ($item->status == 'dipinjam' && now()->gt($batas)) {
-                $terlambat = $batas->diffInDays(now());
-                $dendaFix = $terlambat * 5000 * $item->jumlah;
-            }
-            if ($item->status_pembayaran == 'lunas') {
-                $dendaFix = 0;
-            }
-            $item->terlambat = $terlambat;
-            $item->total_denda = $dendaFix;
-
-            $totalDenda += $dendaFix;
-        }
+    $totalDenda += $item->total_denda;
+}
 
         return view('user.denda', compact('denda', 'totalDenda'));
     }

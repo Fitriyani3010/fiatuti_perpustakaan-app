@@ -5,87 +5,140 @@
 @section('content')
 
 <style>
-    body {
-        margin:0;
-        font-family:Poppins, sans-serif;
-        background:#eae6e3;
-    }
+/* BACKGROUND VINTAGE */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #e9e2d6;
+}
 
-    .card {
-        background:white;
-        padding:20px;
-        border-radius:12px;
-        margin-bottom:20px;
-        box-shadow:0 4px 10px rgba(0,0,0,0.08);
-    }
+/* CARD VINTAGE */
+.card {
+    background: #fffaf3;
+    padding: 22px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    border: 1px solid #e6d3b3;
+    box-shadow: 0 10px 25px rgba(90, 60, 30, 0.12);
+}
 
-    .table-modern {
-        width:100%;
-        border-collapse:collapse;
-        table-layout:fixed;
-    }
+/* TITLE */
+.card h2 {
+    margin: 0;
+    color: #4b2e1e;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
 
-    .table-modern th {
-        background:#6b3f24;
-        color:white;
-        padding:12px;
-        text-align:center;
-    }
+/* TABLE */
+.table-modern {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    background: #fffdf8;
+    border-radius: 12px;
+    overflow: hidden;
+}
 
-    .table-modern td {
-        padding:12px;
-        text-align:center;
-        border-bottom:1px solid #eee;
-    }
+/* HEADER */
+.table-modern th {
+    background: linear-gradient(135deg, #6b3f24, #8b5a2b);
+    color: #fff;
+    padding: 14px;
+    text-align: center;
+    font-weight: 600;
+    border-bottom: 2px solid #d8b58a;
+}
 
-    .table-modern tr:hover {
-        background:#f5f5f5;
-    }
+/* BODY */
+.table-modern td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ead9c3;
+    color: #4b2e1e;
+}
 
-    .badge {
-        padding:4px 10px;
-        border-radius:20px;
-        font-size:12px;
-        color:white;
-    }
+/* HOVER EFFECT */
+.table-modern tr {
+    transition: 0.25s ease;
+}
 
-    .green {
-        background:#28a745;
-    }
+.table-modern tr:hover {
+    background: #f7efe3;
+}
 
-    .pagination {
-        margin-top:15px;
-        text-align:center;
-    }
+/* BADGE VINTAGE */
+.badge {
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    color: #fff;
+    font-weight: 600;
+}
 
-    /* SEARCH + FILTER */
-    .filter-box {
-        display:flex;
-        gap:10px;
-        margin-bottom:15px;
-        flex-wrap:wrap;
-    }
+.green {
+    background: #2f7a4f;
+}
 
-    .input {
-        padding:10px 14px;
-        border-radius:999px;
-        border:1px solid #ddd;
-        outline:none;
-        width:220px;
-    }
+/* FILTER SECTION */
+.filter-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
 
-    .btn {
-        padding:10px 16px;
-        border:none;
-        border-radius:999px;
-        background:#6b3f24;
-        color:white;
-        cursor:pointer;
-    }
+/* INPUT STYLE */
+.input {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #d8b58a;
+    outline: none;
+    width: 220px;
+    background: #fffdf8;
+    color: #4b2e1e;
+}
+
+/* BUTTON VINTAGE */
+.btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #6b3f24, #8b5a2b);
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+/* PAGINATION */
+.pagination {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.pagination a,
+.pagination span {
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid #d8b58a;
+    text-decoration: none;
+    color: #6b3f24;
+    background: #fffaf3;
+}
+
+.pagination .active span {
+    background: #6b3f24;
+    color: white;
+    border-color: #6b3f24;
+}
 </style>
 <!-- TITLE -->
     <div class="card">
-        <h2>👥 Data Anggota</h2>
+        <h2> Data Anggota</h2>
     </div>
 <div class="card">
     

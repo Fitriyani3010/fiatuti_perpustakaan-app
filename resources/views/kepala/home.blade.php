@@ -2,17 +2,33 @@
 @section('content')
 
 <style>
-/* WELCOME */
-.welcome-box {
-    background: linear-gradient(135deg,#6b3f24,#a47148);
-    color: white;
-    padding: 25px;
-    border-radius: 15px;
-    margin-bottom: 25px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+/* BACKGROUND VINTAGE */
+body {
+    font-family: Poppins, sans-serif;
+    background: #e9e2d6;
 }
 
-/* CARD STAT */
+/* WELCOME BOX */
+.welcome-box {
+    background: linear-gradient(135deg,#6b3f24,#8b5a2b);
+    color: #fff;
+    padding: 25px;
+    border-radius: 16px;
+    margin-bottom: 25px;
+    box-shadow: 0 10px 25px rgba(90, 60, 30, 0.25);
+    border: 1px solid #d8b58a;
+}
+
+.welcome-box h2 {
+    margin: 0;
+}
+
+.welcome-box p {
+    margin-top: 5px;
+    opacity: 0.9;
+}
+
+/* STAT CARDS */
 .stat-container {
     display: flex;
     gap: 20px;
@@ -23,11 +39,12 @@
     flex: 1;
     min-width: 200px;
     padding: 20px;
-    border-radius: 14px;
+    border-radius: 16px;
     color: white;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    transition: 0.3s;
+    box-shadow: 0 10px 25px rgba(90, 60, 30, 0.2);
+    transition: 0.3s ease;
     cursor: pointer;
+    border: 1px solid rgba(216,181,138,0.5);
 }
 
 .card-stat:hover {
@@ -42,28 +59,49 @@
     margin-top: 25px;
 }
 
+/* BOX VINTAGE */
 .box {
-    background: white;
+    background: #fffaf3;
     padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(90, 60, 30, 0.12);
+    border: 1px solid #e6d3b3;
 }
 
-/* chart & aktivitas */
+/* CHART BOX */
 .chart-box {
     flex: 2;
     min-width: 400px;
 }
 
+/* ACTIVITY BOX */
 .activity-box {
     flex: 1;
     min-width: 280px;
 }
 
+/* ACTIVITY ITEM */
 .activity-item {
     padding: 10px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #ead9c3;
     font-size: 14px;
+    color: #4b2e1e;
+}
+
+.activity-item b {
+    color: #6b3f24;
+}
+
+
+
+/* CANVAS */
+canvas {
+    margin-top: 20px;
+}
+
+/* SMOOTH TRANSITION */
+* {
+    transition: 0.2s ease;
 }
 </style>
 

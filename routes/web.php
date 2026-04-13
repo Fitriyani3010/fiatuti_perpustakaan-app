@@ -8,7 +8,16 @@ use App\Http\Controllers\PetugasDashboardController;
 use App\Http\Controllers\KepalaDashboardController;
 
 Route::get('/', function () {
-    return view('welcome');
+    if (!auth()->check()) {
+        return view('welcome');
+    }
+
+    return match (auth()->user()->role) {
+        'user' => redirect('/dashboard/user'),
+        'petugas' => redirect('/dashboard/petugas'),
+        'kepala_perpustakaan' => redirect('/dashboard/kepala'),
+        default => view('welcome'),
+    };
 });
 // auth
 Route::middleware('guest')->group(function () {
@@ -112,3 +121,5 @@ Route::prefix('kepala')->name('kepala.')->group(function () {
         ->name('detail_buku'); // ⬅️ INI PENTING
 
 });
+
+

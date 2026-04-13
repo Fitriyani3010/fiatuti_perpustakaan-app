@@ -2,80 +2,77 @@
 
 @section('content')
    <style>
-   .page-title {
+  .page-title {
     font-size: 22px;
     font-weight: 700;
     margin-bottom: 20px;
-    color: #374151;
+    color: #4b2e1e;
+  
 }
 
-/* GRID BIAR LAYOUT BAGUS */
+/* WRAPPER */
 .wrapper {
     display: grid;
     grid-template-columns: 1fr 2fr;
-      gap: 30px; /* 🔥 ini yang bikin renggang */
-    gap: 0;
+    gap: 20px;
 }
 
-/* CARD */
-.card {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 18px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-    transition: 0.3s;
-        border: 1px solid #f1f1f1;
-        margin-bottom: 20px;
-   
-}
-
-/* CARD */
-.card1 {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 18px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-    transition: 0.3s;
-    width:50%;
+/* CARD UMUM */
+.card, .card1 {
+    background: #fdf8f3; /* kertas tua */
+    padding: 22px;
+    border-radius: 20px;
+    border: 1px solid #e6d5c3;
+    box-shadow: 0 10px 30px rgba(75, 46, 30, 0.15);
     margin-bottom: 20px;
 }
 
-
-.card:hover {
-    transform: translateY(-2px);
+/* KHUSUS CARD INPUT */
+.card1 {
+    width: 50%;
 }
 
-/* TITLE CARD */
-.card h5 {
+/* HOVER */
+.card:hover {
+    transform: translateY(-3px);
+    transition: 0.3s;
+}
+
+/* TITLE */
+.card h5,
+.card1 h5 {
     margin-bottom: 15px;
     font-size: 16px;
     color: #6b3f24;
 }
 
-/* INPUT */
+/* INPUT GROUP */
 .input-group {
     display: flex;
     gap: 10px;
-    width: 50%;
+    width: 100%;
 }
 
+/* INPUT */
 .input-group input {
     flex: 1;
     padding: 12px;
-    border-radius: 999px;
-    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    border: 1px solid #d6c2b5;
+    background: #fffaf5;
+    color: #4b2e1e;
     outline: none;
     transition: 0.2s;
 }
 
 .input-group input:focus {
     border-color: #6b3f24;
-    box-shadow: 0 0 0 3px rgba(107, 63, 36, 0.1);
+    box-shadow: 0 0 0 3px rgba(107, 63, 36, 0.15);
 }
 
 /* BUTTON TAMBAH */
 .input-group button {
-    background: #6b3f24;
+    background: #6b8e23; /* olive */
     color: white;
     border: none;
     padding: 12px 18px;
@@ -85,44 +82,50 @@
 }
 
 .input-group button:hover {
-    background: #7a4a2a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(75, 46, 30, 0.2);
 }
 
 /* TABLE */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
+  
 }
 
 /* HEADER */
 th {
-    background: #6b3f24;
-    color: white;
+    background: linear-gradient(135deg, #6b3f24, #8b5e3c);
+    color: #fff8f0;
     padding: 14px;
     text-align: left;
-    font-size: 14px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #d6c2b5;
 }
 
-/* ISI */
+/* DATA */
 td {
     padding: 14px;
-    border-bottom: 1px solid #eee;
     font-size: 14px;
+    color: #4b2e1e;
+    border-bottom: 1px dashed #e0cfc2;
 }
 
-/* ROW HOVER */
-tbody tr {
-    transition: 0.2s;
+/* STRIPED */
+tbody tr:nth-child(even) {
+    background: #f7efe8;
 }
 
+/* HOVER */
 tbody tr:hover {
-    background: #f9f6f3;
+    background: #f1e4d8;
+    transition: 0.3s;
 }
 
 /* BUTTON DELETE */
 .btn-delete {
-    background: #ef4444;
+    background: #a94438; /* merah bata */
     color: white;
     border: none;
     padding: 6px 14px;
@@ -133,14 +136,16 @@ tbody tr:hover {
 }
 
 .btn-delete:hover {
-    background: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(75,46,30,0.2);
 }
 
 /* EMPTY */
 .empty {
     text-align: center;
     padding: 25px;
-    color: #9ca3af;
+    color: #8b6f5a;
+    font-style: italic;
 }
 </style>
     <h4 class="page-title">Kelola Kategori</h4>

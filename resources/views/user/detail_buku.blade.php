@@ -97,7 +97,7 @@ body {
     margin-top: 10px;
     font-weight: 600;
     transition: 0.2s;
-    font-family: 'Georgia', serif;
+
 }
 
 /* PINJAM */
@@ -151,7 +151,7 @@ body {
     color: #5c3a21;
     border-radius: 8px;
     font-size: 14px;
-    font-family: 'Georgia', serif;
+   
     transition: 0.2s;
     text-decoration: none !important; /* 🔥 penting */
 }
@@ -212,12 +212,19 @@ body {
                 @endphp
                 {{-- PINJAM --}}
                 @if (!$pinjaman && $buku->stok > 0)
-                    <form action="{{ route('user.pinjam', $buku->id) }}" method="POST">
-                        @csrf
-                        <input type="number" name="jumlah" class="input-jumlah" min="1"
-                            max="{{ min(5, $buku->stok) }}" value="1">
-                        <button class="btn btn-pinjam">Pinjam Buku</button>
-                    </form>
+                   <form action="{{ route('user.pinjam', $buku->id) }}" method="POST">
+    @csrf
+
+    {{-- STOK DITAMPILKAN DI ATAS INPUT --}}
+    <p class="label" style="margin-bottom:8px;">
+        Stok tersedia: <b>{{ $buku->stok }}</b>
+    </p>
+
+    <input type="number" name="jumlah" class="input-jumlah" min="1"
+        max="{{ min(5, $buku->stok) }}" value="1">
+
+    <button class="btn btn-pinjam">Pinjam Buku</button>
+</form>
                 @endif
                 {{-- MENUNGGU --}}
                 @if ($pinjaman && $pinjaman->status == 'menunggu')

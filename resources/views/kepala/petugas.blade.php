@@ -5,140 +5,192 @@
 @section('content')
 
 <style>
-    body {
-        margin:0;
-        font-family:Poppins, sans-serif;
-        background:#eae6e3;
-    }
+/* BACKGROUND VINTAGE */
+body {
+    margin: 0;
+    font-family: Poppins, sans-serif;
+    background: #e9e2d6;
+}
 
-    a { text-decoration:none; color:inherit; }
+a {
+    text-decoration: none;
+    color: inherit;
+}
 
-    .content {
-        padding:25px;
-    }
+/* CONTENT WRAPPER */
+.content {
+    padding: 25px;
+}
 
-    .card {
-        background:white;
-        padding:20px;
-        border-radius:12px;
-        margin-bottom:20px;
-        box-shadow:0 4px 10px rgba(0,0,0,0.08);
-    }
+/* CARD VINTAGE */
+.card {
+    background: #fffaf3;
+    padding: 20px;
+    border-radius: 14px;
+    margin-bottom: 20px;
+    border: 1px solid #e6d3b3;
+    box-shadow: 0 10px 25px rgba(90, 60, 30, 0.12);
+}
 
-    /* BUTTON STYLE (disamain kayak lama) */
-    .btn-add {
-        background:#6b3f24;
-        color:white;
-        padding:8px 15px;
-        border:none;
-        border-radius:6px;
-        cursor:pointer;
-    }
+/* TITLE */
+.card h2 {
+    color: #4b2e1e;
+    margin: 0;
+}
 
-    .btn-green {
-        background:#28a745;
-        color:white;
-        padding:8px 15px;
-        border:none;
-        border-radius:6px;
-        cursor:pointer;
-    }
+/* PAGE HEADER */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
 
-    .btn-edit {
-        background:#0275d8;
-        color:white;
-        padding:6px 10px;
-        border:none;
-        border-radius:6px;
-        cursor:pointer;
-    }
+/* SEARCH */
+.search {
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: 1px solid #d8b58a;
+    width: 250px;
+    outline: none;
+    background: #fffdf8;
+    color: #4b2e1e;
+}
 
-    .btn-delete {
-        background:#d9534f;
-        color:white;
-        padding:6px 10px;
-        border:none;
-        border-radius:6px;
-        cursor:pointer;
-    }
+/* BUTTONS VINTAGE */
+.btn-add {
+    background: linear-gradient(135deg, #6b3f24, #8b5a2b);
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
 
-    /* TABLE */
-    table {
-        width:100%;
-        border-collapse:collapse;
-        table-layout:fixed;
-    }
+.btn-add:hover {
+    opacity: 0.9;
+}
 
-    th {
-        background:#6b3f24;
-        color:white;
-        padding:12px;
-    }
+.btn-green {
+    background: #2f7a4f;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
 
-    td {
-        padding:12px;
-        text-align:center;
-        border-bottom:1px solid #eee;
-    }
+.btn-edit {
+    background: #c07a2c;
+    color: white;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
 
-    tr:hover {
-        background:#f5f5f5;
-    }
+.btn-delete {
+    background: #b23a3a;
+    color: white;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
 
-    /* INPUT */
-    .search {
-        padding:10px 16px;
-        border-radius:999px;
-        border:1px solid #ddd;
-        width:250px;
-        outline:none;
-    }
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    background: #fffdf8;
+    border-radius: 12px;
+    overflow: hidden;
+}
 
-    /* MODAL */
-    .modal {
-        display:none;
-        position:fixed;
-        inset:0;
-        background:rgba(0,0,0,0.5);
-        justify-content:center;
-        align-items:center;
-        z-index:999;
-    }
+/* HEADER */
+th {
+    background: linear-gradient(135deg, #6b3f24, #8b5a2b);
+    color: white;
+    padding: 12px;
+    border-bottom: 2px solid #d8b58a;
+}
 
-    .modal-content {
-        background:white;
-        padding:25px;
-        border-radius:12px;
-        width:380px;
-    }
+/* BODY */
+td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ead9c3;
+    color: #4b2e1e;
+}
 
-    .input-modern {
-        width:100%;
-        padding:10px 12px;
-        border-radius:8px;
-        border:1px solid #ccc;
-        outline:none;
-        box-sizing:border-box;
-    }
+/* HOVER ROW */
+tr {
+    transition: 0.25s;
+}
 
-    .input-modern:focus {
-        border-color:#6b3f24;
-    }
+tr:hover {
+    background: #f7efe3;
+}
 
-    /* HEADER BAR */
-    .page-header {
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        margin-bottom:20px;
-    }
+/* MODAL VINTAGE */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal-content {
+    background: #fffaf3;
+    padding: 25px;
+    border-radius: 14px;
+    width: 380px;
+    border: 1px solid #e6d3b3;
+    box-shadow: 0 10px 25px rgba(90, 60, 30, 0.2);
+}
+
+/* INPUT */
+.input-modern {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #d8b58a;
+    outline: none;
+    box-sizing: border-box;
+    background: #fffdf8;
+    color: #4b2e1e;
+}
+
+.input-modern:focus {
+    border-color: #6b3f24;
+}
+
+/* BUTTON INSIDE MODAL */
+.modal-content button {
+    margin-top: 5px;
+}
+
+/* EMPTY STATE */
+td[colspan] {
+    color: #6b5a4a;
+}
+
+/* SMOOTH ANIMATION */
+button, input, textarea {
+    transition: 0.2s ease;
+}
 </style>
 
 <div class="content">
 
     <!-- TITLE -->
     <div class="card">
-        <h2>👨‍💼 Data Petugas</h2>
+        <h2> Data Petugas</h2>
     </div>
 
     <!-- SEARCH + BUTTON -->

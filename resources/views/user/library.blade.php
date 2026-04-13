@@ -2,178 +2,172 @@
 
 @section('content')
 <style>
-    .top-bar {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 20px;
-    }
+/* CONTAINER VINTAGE */
+.container {
+    background: #f5efe6;
+    padding: 25px;
+    border-radius: 18px;
+    border: 1px solid #e6d3b3;
+    box-shadow: inset 0 0 0 1px #fff, 0 10px 25px rgba(101,67,33,0.15);
+ 
+}
 
-    .search-input {
-        flex: 1;
-        padding: 10px 15px;
-        border-radius: 20px;
-        border: 1px solid #ccc;
-        width:45%;
-        margin-top:20px;
-    }
-
-  /* KATEGORI */
-.kategori-bar {
-    display: flex;
-    gap: 6px; /* lebih rapat */
-    overflow-x: auto;
+/* TITLE */
+h2 {
+    color: #5a3b24;
+    font-weight: bold;
+    border-left: 5px solid #8b5e3c;
+    padding-left: 10px;
     margin-bottom: 15px;
 }
 
-/* ITEM */
-.kategori-item {
-    padding: 5px 12px; /* lebih kecil */
-    background: #fff;
-    border-radius: 999px; /* biar pill */
-    border: 1px solid #ddd;
-    white-space: nowrap;
+/* SEARCH BAR */
+.top-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+/* INPUT */
+.search-input,
+.kategori-select {
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid #d6c2a8;
+    background: #fffaf3;
+   
+    color: #4b2e1e;
+}
+
+/* BUTTON */
+.btn-cari {
+    padding: 10px 16px;
+    border-radius: 12px;
+    border: none;
+    background: #8b5e3c;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+    font-weight: 600;
+}
+
+.btn-cari:hover {
+    background: #5c3a21;
+}
+
+/* INFO TEXT */
+p {
+    color: #7a5c3e;
+    font-size: 13px;
+}
+
+/* GRID */
+.book-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 24px;
+    margin-top: 20px;
+}
+
+/* BOOK CARD */
+.book-item {
+    background: #fffaf3;
+    padding: 14px;
+    border-radius: 16px;
+    box-shadow: 0 6px 15px rgba(101,67,33,0.15);
+    border: 1px solid #e6d3b3;
+    text-align: center;
     text-decoration: none;
-    color: #374151;
-    font-size: 12px; /* kecilin teks */
-    font-weight: 500;
+    color: #4b2e1e;
+    transition: 0.3s;
+    position: relative;
+}
+
+.book-item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 25px rgba(101,67,33,0.25);
+}
+
+/* COVER */
+.book-item img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid #e6d3b3;
+}
+
+/* BADGE KATEGORI */
+.badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #8b5e3c;
+    color: white;
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+/* TEXT */
+.book-item h4 {
+    font-size: 14px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.book-item p {
+    font-size: 12px;
+    color: #7a5c3e;
+}
+
+/* BUTTON GROUP */
+.btn-group {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+/* PINJAM BUTTON */
+.btn-pinjam {
+    background: #3cc53a;
+    color: white;
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-weight: 600;
     transition: 0.2s;
 }
 
-/* HOVER & ACTIVE */
-.kategori-item.active,
-.kategori-item:hover {
-    background: #2563eb;
+.btn-pinjam:hover {
+    background: #5c3a21;
+}
+
+/* PAGINATION */
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+.pagination a,
+.pagination span {
+    border-radius: 10px;
+    border: 1px solid #e6d3b3;
+    background: #fffaf3;
+    color: #5a3b24;
+    padding: 8px 12px;
+}
+
+.pagination a:hover {
+    background: #8b5e3c;
     color: white;
 }
-    /* GRID */
-    .book-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 24px;
-        margin-bottom: 20px;
-        margin-top:20px;
-    }
 
-    /* CARD */
-    .book-item {
-        background: #fff;
-        padding: 14px;
-        border-radius: 16px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-        text-align: center;
-        text-decoration: none;
-        color: inherit;
-        transition: 0.25s;
-        position: relative;
-    }
-
-    .book-item:hover {
-        transform: translateY(-6px);
-    }
-
-    /* COVER */
-    .book-item img {
-        width: 100%;
-        height: 190px;
-        object-fit: cover;
-        border-radius: 12px;
-    }
-
-    /* BADGE */
-    .badge {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: rgba(239, 68, 68, 0.95);
-        color: white;
-        font-size: 10px;
-        padding: 4px 10px;
-        border-radius: 20px;
-        z-index: 2;
-    }
-
-    /* TEXT */
-    .book-item h4 {
-        font-size: 14px;
-        margin-top: 10px;
-        font-weight: 600;
-    }
-
-    .book-item p {
-        font-size: 12px;
-        color: #6b7280;
-        margin-bottom: 10px;
-    }
-
-    /* BUTTON */
-    .btn-group {
-        display: flex;
-        justify-content: center;
-        gap: 8px;
-    }
-
-    .btn-detail {
-        background: #3b82f6;
-        color: white;
-        font-size: 12px;
-        padding: 6px 12px;
-        border-radius: 8px;
-    }
-
-    .btn-pinjam {
-        background: #22c55e;
-        color: white;
-        font-size: 12px;
-        padding: 6px 12px;
-        border-radius: 8px;
-    }
-
-    /* PAGINATION */
-    .pagination-wrapper {
-        display: flex;
-        justify-content: center;
-        margin-top: 25px;
-    }
-
-    .pagination {
-        display: flex;
-        gap: 8px;
-    }
-
-    .pagination li {
-        list-style: none;
-    }
-
-    .pagination a,
-    .pagination span {
-        min-width: 36px;
-        height: 36px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 10px;
-        border: 1px solid #e5e7eb;
-        background: #fff;
-        color: #374151;
-        text-decoration: none;
-        font-size: 13px;
-        transition: 0.2s;
-    }
-
-    .pagination a:hover {
-        background: #2563eb;
-        color: white;
-        transform: translateY(-2px);
-    }
-
-    .pagination .active span {
-        background: #2563eb;
-        color: white;
-    }
-
-    .pagination .disabled span {
-        opacity: 0.5;
-    }
+.pagination .active span {
+    background: #6b3f24;
+    color: white;
+}
 </style>
 
 <div class="container">

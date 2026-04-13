@@ -2,154 +2,200 @@
 
 @section('content')
     <style>
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+       /* HEADER TITLE */
+h2 {
+    color: #4b2e1e;
+   
+}
 
-        .actions {
-            display: flex;
-            gap: 10px;
-        }
+/* SEARCH BOX (lebih kotak, ga bulet banget) */
+form input[type="text"] {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 10px; /* 🔥 sebelumnya 999px */
+    border: 1px solid #d6c2b5;
+    background: #fffaf5;
+    color: #4b2e1e;
+    outline: none;
+    transition: 0.2s;
+}
 
-       table {
+form input[type="text"]:focus {
+    border-color: #6b3f24;
+    box-shadow: 0 0 0 2px rgba(107,63,36,0.15);
+}
+
+/* BUTTON SEARCH */
+form button {
+    padding: 10px 16px;
+    border-radius: 10px; /* 🔥 lebih clean */
+    border: none;
+    background: #6b3f24;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+form button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(75,46,30,0.2);
+}
+
+/* TABLE BOX */
+.table-box {
+    background: #fdf8f3;
+    padding: 22px;
+    border-radius: 20px;
+    border: 1px solid #e6d5c3;
+    box-shadow: 0 10px 30px rgba(75, 46, 30, 0.15);
+}
+
+/* TABLE */
+table {
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
+   
 }
 
 /* HEADER */
 th {
-    background: #6b3f24;
-    color: white;
+    background: linear-gradient(135deg, #6b3f24, #8b5e3c);
+    color: #fff8f0;
     padding: 14px 10px;
-    font-weight: 600;
-    font-size: 14px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
     text-align: center;
+    border-bottom: 2px solid #d6c2b5;
 }
 
-/* ISI */
+/* DATA */
 td {
     padding: 12px 10px;
-    border-bottom: 1px solid #eee;
     font-size: 14px;
+    color: #4b2e1e;
+    border-bottom: 1px dashed #e0cfc2;
     text-align: center;
 
-    /* 🔥 INI KUNCI BIAR RAPI */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-
-
-/* LEBAR KOLOM FIX */
-th:nth-child(1), td:nth-child(1) { width: 15%; } /* nama */
-th:nth-child(2), td:nth-child(2) { width: 18%; } /* email */
-th:nth-child(3), td:nth-child(3) { width: 12%; } /* nisn */
-th:nth-child(4), td:nth-child(4) { width: 10%; } /* kelas */
-th:nth-child(5), td:nth-child(5) { width: 13%; } /* hp */
-th:nth-child(6), td:nth-child(6) { width: 22%; } /* alamat */
-th:nth-child(7), td:nth-child(7) { width: 10%; } /* aksi */
+/* STRIPED */
+tbody tr:nth-child(even) {
+    background: #f7efe8;
+}
 
 /* HOVER */
-tr {
-    transition: 0.2s;
-}
-
 tr:hover {
-    background: #f9f6f3;
+    background: #f1e4d8;
+    transition: 0.3s;
 }
 
-/* AKSI BUTTON BIAR RAPI */
-.action-group {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
+/* ACTION BUTTON */
+.edit {
+    background: #4a6fa5; /* biru vintage */
+    border-radius: 8px;
+}
+
+.hapus {
+    background: #a94438; /* merah bata */
+    border-radius: 8px;
+}
+
+/* BUTTON UMUM */
+.btn {
+    background: #6b8e23; /* olive */
+    border-radius: 10px;
 }
 
 /* TABLE BOX */
 .table-box {
-    background: white;
-    padding: 20px;
-    border-radius: 16px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    background: #fdf8f3;
+    padding: 22px;
+    border-radius: 20px;
+    border: 1px solid #e6d5c3;
+    box-shadow: 0 10px 30px rgba(75, 46, 30, 0.15);
 }
-      
-        .edit {
-            background: #7aabfb;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
 
-        .hapus {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
+/* MODAL OVERLAY */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(75, 46, 30, 0.6);
+    backdrop-filter: blur(3px);
+    justify-content: center;
+    align-items: center;
+}
 
-        .btn {
-            background: #10b981;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-        }
+/* MODAL BOX */
+.modal form {
+    background: #fdf8f3;
+    padding: 25px;
+    border-radius: 20px;
+    width: 350px;
+    border: 1px solid #e6d5c3;
+    box-shadow: 0 15px 35px rgba(75, 46, 30, 0.3);
+}
 
-        /* MODAL */
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
+/* INPUT MODAL */
+.modal input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 1px solid #d6c2b5;
+    background: #fffaf5;
+    color: #4b2e1e;
+}
 
-        .modal form {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            width: 350px;
-        }
+/* BUTTON MODAL */
+.modal .btn {
+    margin-top: 10px;
+}
+.action-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* ⬅️ tambahin jarak */
+}
+.edit {
+    background: #4a6fa5;
+    color: white;
+    border: none;
+    padding: 6px 12px; /* ⬅️ lebih lebar */
+    border-radius: 8px;
+    cursor: pointer;
+}
 
-        .modal input {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-        }
+.hapus {
+    background: #a94438;
+    color: white;
+    border: none;
+    padding: 6px 12px; /* ⬅️ samain */
+    border-radius: 8px;
+    cursor: pointer;
+}
         
     </style>
 
     <div style="margin-bottom:20px;">
-    <h2 style="margin-bottom:10px;">👥 Kelola Anggota</h2>
+    <h2 style="margin-bottom:10px;"> Kelola Anggota</h2>
 
     <form method="GET" style="display:flex; gap:10px; max-width:400px;">
         <input type="text"
-               name="search"
-               value="{{ request('search') }}"
-               placeholder="Cari nama / email..."
-               style="
-                   flex:1;
-                   padding:10px 14px;
-                   border-radius:999px;
-                   border:1px solid #ddd;
-                   outline:none;
-               ">
+   name="search"
+   value="{{ request('search') }}"
+   placeholder="Cari nama / email..."
+   style="
+       flex:1;
+       padding:10px 14px;
+       border-radius:6px; /* ⬅️ FIX */
+       border:1px solid #d6c2b5;
+       outline:none;
+       background:#fdf8f3;
+   ">
 
         <button type="submit"
                 style="
@@ -198,7 +244,7 @@ tr:hover {
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="hapus">
-                                    Delete
+                                    Hapus
                                 </button>
                             </form>
                         </div>

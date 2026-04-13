@@ -4,14 +4,26 @@
 
 @push('styles')
 <style>
-/* CONTAINER */
+/* CONTAINER VINTAGE */
 .content-box {
-    background: #e5e5e5;
-    padding: 20px;
-    border-radius: 16px;
+    background: #f5efe6;
+    padding: 22px;
+    border-radius: 18px;
+    border: 1px solid #e6d3b3;
+    box-shadow: inset 0 0 0 1px #fff, 0 8px 20px rgba(101,67,33,0.15);
+ 
 }
 
-/* STAT */
+/* HEADER WELCOME */
+.content-box > div:first-child {
+    background: linear-gradient(135deg, #6b3f24, #8b5e3c);
+    color: #fff;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+/* STAT GRID */
 .stat-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -19,47 +31,60 @@
     margin-bottom: 25px;
 }
 
+/* STAT CARD VINTAGE */
 .stat-card {
     border-radius: 16px;
     padding: 20px;
-    color: white;
+    color: #fff;
     transition: 0.3s;
     cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    border: 1px solid rgba(255,255,255,0.2);
 }
 
+/* HOVER */
 .stat-card:hover {
     transform: translateY(-6px);
+    filter: brightness(1.05);
 }
 
-/* WARNA */
-.stat-card.green { background: #4CAF50; }
-.stat-card.green:hover { background: linear-gradient(45deg,#4CAF50,#2ecc71); }
+/* VINTAGE COLOR PALETTE */
+.stat-card.green {
+    background: linear-gradient(135deg, #5c8d4d, #3e6b35);
+}
 
-.stat-card.yellow { background: #f4b942; }
-.stat-card.yellow:hover { background: linear-gradient(45deg,#f4b942,#f39c12); }
+.stat-card.yellow {
+    background: linear-gradient(135deg, #c49a3a, #a6781f);
+}
 
-.stat-card.blue { background: #3498db; }
-.stat-card.blue:hover { background: linear-gradient(45deg,#3498db,#5dade2); }
+.stat-card.blue {
+    background: linear-gradient(135deg, #4a7a9e, #2f5d7c);
+}
 
-.stat-card.red { background: #e74c3c; }
-.stat-card.red:hover { background: linear-gradient(45deg,#e74c3c,#ff6b6b); }
+.stat-card.red {
+    background: linear-gradient(135deg, #a14b3b, #7a2f24);
+}
 
+/* TEXT */
 .stat-num {
-    font-size: 24px;
-    font-weight: 700;
+    font-size: 22px;
+    font-weight: bold;
+
 }
 
 .stat-lbl {
     font-size: 13px;
-    margin-top: 5px;
+    opacity: 0.9;
 }
 
-/* SECTION */
+/* SECTION TITLE */
 .sec-title {
     font-size: 18px;
-    font-weight: 700;
+    font-weight: bold;
+    color: #5a3b24;
     margin-bottom: 15px;
-    color: #000;
+    border-left: 4px solid #8b5e3c;
+    padding-left: 10px;
 }
 
 /* GRID BUKU */
@@ -69,22 +94,23 @@
     gap: 20px;
 }
 
-/* CARD BUKU */
+/* CARD BUKU VINTAGE */
 .buku-card {
-    background: #f9fafb;
+    background: #fffaf3;
     border-radius: 16px;
     padding: 12px;
     text-align: center;
     transition: 0.3s;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-     text-decoration: none; /* 🔥 HILANGIN GARIS */
-    color: inherit;
+    box-shadow: 0 6px 15px rgba(101,67,33,0.15);
+    border: 1px solid #e6d3b3;
+    text-decoration: none;
+    color: #4b2e1e;
+   
 }
 
 .buku-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.15);
-         text-decoration: none; /* 🔥 HILANGIN GARIS */
+    box-shadow: 0 10px 25px rgba(101,67,33,0.25);
 }
 
 /* COVER */
@@ -93,6 +119,7 @@
     border-radius: 10px;
     overflow: hidden;
     margin-bottom: 10px;
+    border: 1px solid #e6d3b3;
 }
 
 .buku-cover img {
@@ -101,17 +128,36 @@
     object-fit: cover;
 }
 
-/* INFO */
+/* TEXT */
 .buku-judul {
     font-size: 14px;
-    font-weight: 600;
-      margin-top: 5px;
+    font-weight: bold;
+    margin-top: 5px;
+    color: #4b2e1e;
 }
 
 .buku-penulis {
     font-size: 12px;
-    color: #777;
-margin-bottom: 6px;
+    color: #7a5c3e;
+    margin-bottom: 6px;
+}
+
+/* BUTTON */
+.buku-card a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 12px;
+    background: #8b5e3c;
+    color: white;
+    font-size: 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.buku-card a:hover {
+    background: #5c3a21;
 }
 
 /* PAGINATION */
@@ -121,32 +167,17 @@ margin-bottom: 6px;
     margin-top: 25px;
 }
 
-.pagination {
-    display: flex;
-    gap: 8px;
-}
-
-.pagination li {
-    list-style: none;
-}
-
 .pagination a,
 .pagination span {
-    min-width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     border-radius: 10px;
-    border: 1px solid #e5e7eb;
-    background: #fff;
-    color: #374151;
-    text-decoration: none;
-    font-size: 13px;
+    border: 1px solid #e6d3b3;
+    background: #fffaf3;
+    color: #5a3b24;
+    padding: 8px 12px;
 }
 
 .pagination a:hover {
-    background: #6b3f24;
+    background: #8b5e3c;
     color: white;
 }
 
@@ -170,7 +201,7 @@ margin-bottom: 6px;
         👋 Selamat datang, {{ auth()->user()->name }}
     </div>
     <div style="font-size:13px; opacity:0.9; margin-top:3px;">
-        Selamat membaca dan temukan buku favoritmu hari ini 📚
+        Temukan buku favoritmu hari ini 
     </div>
 </div>
 
@@ -237,7 +268,7 @@ margin-bottom: 6px;
        "
        onmouseover="this.style.background='#16a34a'"
        onmouseout="this.style.background='#22c55e'">
-        📥 Pinjam
+         Pinjam
     </a>
 
 </div>
